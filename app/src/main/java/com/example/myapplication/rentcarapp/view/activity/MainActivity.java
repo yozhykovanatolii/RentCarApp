@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         editPassword();
     }
 
-
     private void initComponents(){
         signInUsername = findViewById(R.id.signInUsername);
         signInPassword = findViewById(R.id.signInPassword);

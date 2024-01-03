@@ -1,6 +1,7 @@
 package com.example.myapplication.rentcarapp.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.BroadcastReceiver;
@@ -87,31 +88,12 @@ public class RentDetailActivity extends AppCompatActivity {
         returnCar.setEnabled(false);
     }
 
-
     private void checkDateToReturnCar(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        try {
-            Date currentDate = new Date();
-            Date returnDate = simpleDateFormat.parse(rent.getReturnDate());
-            long difference_In_Time = returnDate.getTime() - currentDate.getTime();
-            long difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24)) % 365;
-            isDateToReturnCar(difference_In_Days);
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
+        carViewModel.checkDate(rent.getReturnDate()).observe(this, this::isDateToReturnCar);
     }
-
+    
     private void checkDateToIssuingCar(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        try {
-            Date currentDate = new Date();
-            Date issuingDate = simpleDateFormat.parse(rent.getIssuingDate());
-            long difference_In_Time = currentDate.getTime() - issuingDate.getTime();
-            long difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24)) % 365;
-            isCanCancelRent(difference_In_Days);
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
+        carViewModel.checkDate(rent.getIssuingDate()).observe(this, this::isCanCancelRent);
     }
 
     private void isCanCancelRent(long difference_In_Days){

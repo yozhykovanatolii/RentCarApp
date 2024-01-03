@@ -1,6 +1,6 @@
 package com.example.myapplication.rentcarapp.view.activity;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -19,12 +17,9 @@ import com.example.myapplication.rentcarapp.model.firestore.models.Car;
 import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
 import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 import com.google.android.material.slider.RangeSlider;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class FilterActivity extends AppCompatActivity {
     RangeSlider priceSlider;

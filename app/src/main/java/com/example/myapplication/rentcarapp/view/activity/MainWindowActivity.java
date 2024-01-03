@@ -27,7 +27,7 @@ public class MainWindowActivity extends AppCompatActivity {
     BottomNavigationView navigationBottom;
     List<Car> cars;
     CarViewModel carViewModel;
-    BroadcastReceiver broadcastReceiver;
+    //BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +42,8 @@ public class MainWindowActivity extends AppCompatActivity {
     }
 
     private void initBroadcastReceiver(){
-        broadcastReceiver = new InternetReceiver();
-        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        //broadcastReceiver = new InternetReceiver();
+        //registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     private void showFragment(Bundle savedInstanceState){
@@ -84,6 +84,6 @@ public class MainWindowActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        //unregisterReceiver(broadcastReceiver);
     }
 }

@@ -23,13 +23,6 @@ import java.util.Locale;
 
 public class CarViewModel extends ViewModel {
     private CarRepository carRepository;
-    private MutableLiveData<String> carsTransmission = new MutableLiveData<>(null);
-    private MutableLiveData<String> carsTypeOfFuel = new MutableLiveData<>(null);
-    private MutableLiveData<Boolean> driverLicence = new MutableLiveData<>();
-    private MutableLiveData<Boolean> creditCardNumber = new MutableLiveData<>();
-    private MutableLiveData<Boolean> cardSpecialCode = new MutableLiveData<>();
-    private MutableLiveData<Boolean> dateOfCard = new MutableLiveData<>();
-    private MutableLiveData<Integer> priceRent = new MutableLiveData<>();
 
     public CarViewModel(){
         carRepository = new CarRepository();
@@ -116,56 +109,52 @@ public class CarViewModel extends ViewModel {
 
     public LiveData<Boolean> isDriverLicenceNumberWriteCorrect(String driverLicenceNumber){
         if(isDriverLicenceNumberCorrect(driverLicenceNumber)){
-            driverLicence.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            driverLicence.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return driverLicence;
     }
 
     public LiveData<Boolean> isCreditCardNumberWriteCorrect(String creditCard){
         if(isCreditCardNumberLengthEqualNineteen(creditCard)){
-            creditCardNumber.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            creditCardNumber.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return creditCardNumber;
     }
 
     public LiveData<Boolean> isSpecialCodeWriteCorrect(String specialCode){
         if(isSpecialCodeLengthEqualThree(specialCode)){
-            cardSpecialCode.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            cardSpecialCode.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return cardSpecialCode;
     }
 
     public LiveData<Boolean> isDateOfCardWriteCorrect(String cardDate){
         if(isDateOfCardLengthEqualFive(cardDate)){
-            dateOfCard.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            dateOfCard.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return dateOfCard;
     }
 
     public LiveData<String> choiceTransmission(boolean automaton, boolean mechanic){
         if(automaton){
-            carsTransmission.setValue("Automaton");
+            return new MutableLiveData<>("Automaton");
         }if(mechanic){
-            carsTransmission.setValue("Mechanic");
+            return new MutableLiveData<>("Mechanic");
         }
-        return carsTransmission;
+        return new MutableLiveData<>(null);
     }
 
     public LiveData<String> choiceTypeOfFuel(boolean gasoline, boolean diesel){
         if(gasoline){
-            carsTypeOfFuel.setValue("Gasoline");
+            return new MutableLiveData<>("Gasoline");
         }if(diesel){
-            carsTypeOfFuel.setValue("Diesel");
+            return new MutableLiveData<>("Diesel");
         }
-        return carsTypeOfFuel;
+        return new MutableLiveData<>(null);
     }
 
     public LiveData<List<Car>> confirmChoice(boolean childrenChair, String transmission, String typeOfFuel, int minPrice, int maxPrice){
@@ -179,7 +168,22 @@ public class CarViewModel extends ViewModel {
         return carRepository.getCarsByAllChoices(minPrice, maxPrice, childrenChair, transmission, typeOfFuel);
     }
 
+    public LiveData<Long> checkDate(String date){
+        MutableLiveData<Long> differenceBetweenDates = new MutableLiveData<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        try {
+            Date currentDate = new Date();
+            Date returnDate = simpleDateFormat.parse(date);
+            long difference_In_Time = returnDate.getTime() - currentDate.getTime();
+            differenceBetweenDates.setValue((difference_In_Time / (1000 * 60 * 60 * 24)) % 365);
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+        return differenceBetweenDates;
+    }
+
     public LiveData<Integer> calculateDifferenceBetweenTwoDates(String startDate, String endDate, int price){
+        MutableLiveData<Integer> priceRent = new MutableLiveData<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         try {
             Date beginDate = simpleDateFormat.parse(startDate);
