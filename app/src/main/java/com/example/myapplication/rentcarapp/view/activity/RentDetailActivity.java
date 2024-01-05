@@ -107,15 +107,32 @@ public class RentDetailActivity extends AppCompatActivity {
     }
 
     public void returnRent(View view){
-        carViewModel.deleteRent(rent.getId());
-        Toast.makeText(getApplicationContext(), "Rent " + rent.getId() + " was returned", Toast.LENGTH_LONG).show();
-        returnToMainWindow();
+        if(rent.getFines() > 0){
+            paymentOfThePenalty(rent.getFines());
+        }else{
+            showMessageAboutRent("Rent " + rent.getId() + " was deleted");
+            returnToMainWindow();
+        }
+    }
+
+    private void paymentOfThePenalty(int fines){
+        showMessageAboutRent("Rent " + rent.getId() + " was deleted");
+        goToPaymentMethodActivity();
     }
 
     public void onCancelRent(View view){
-        carViewModel.deleteRent(rent.getId());
-        Toast.makeText(getApplicationContext(), "Rent " + rent.getId() + " was canceled", Toast.LENGTH_LONG).show();
+        showMessageAboutRent("Rent " + rent.getId() + " was canceled");
         returnToMainWindow();
+    }
+
+    private void goToPaymentMethodActivity(){
+        Intent intent = new Intent(this, PaymentMethodActivity.class);
+        startActivity(intent);
+    }
+
+    private void showMessageAboutRent(String message){
+        carViewModel.deleteRent(rent.getId());
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
     private void returnToMainWindow(){
