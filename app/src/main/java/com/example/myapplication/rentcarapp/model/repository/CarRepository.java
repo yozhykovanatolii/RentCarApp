@@ -14,6 +14,8 @@ import com.example.myapplication.rentcarapp.model.firestore.models.DriverLicence
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
 import com.example.myapplication.rentcarapp.model.firestore.models.Station;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -314,6 +316,10 @@ public class CarRepository {
             });
         }
         return rents;
+    }
+
+    public void updateFineRent(String idRent, int fine){
+        firestore.collection("rents").document(idRent).update("fines", fine).addOnSuccessListener(unused -> Log.i("Success", "Fines updated")).addOnFailureListener(e -> Log.i("Error", "Update fines exception: ", e));
     }
 
     public void createCreditCard(CreditCard creditCard){
