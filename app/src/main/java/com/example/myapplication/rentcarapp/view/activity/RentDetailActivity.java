@@ -106,9 +106,19 @@ public class RentDetailActivity extends AppCompatActivity {
         }
     }
 
+    public void returnRent(View view){
+        carViewModel.deleteRent(rent.getId());
+        Toast.makeText(getApplicationContext(), "Rent " + rent.getId() + " was returned", Toast.LENGTH_LONG).show();
+        returnToMainWindow();
+    }
+
     public void onCancelRent(View view){
         carViewModel.deleteRent(rent.getId());
         Toast.makeText(getApplicationContext(), "Rent " + rent.getId() + " was canceled", Toast.LENGTH_LONG).show();
+        returnToMainWindow();
+    }
+
+    private void returnToMainWindow(){
         Intent intent = new Intent(this, MainWindowActivity.class);
         startActivity(intent);
     }
