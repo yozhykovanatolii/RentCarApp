@@ -89,7 +89,10 @@ public class RentDetailActivity extends AppCompatActivity {
     }
 
     private void checkDateToReturnCar(){
-        carViewModel.checkDate(rent.getReturnDate()).observe(this, this::isDateToReturnCar);
+        carViewModel.checkDate(rent.getReturnDate()).observe(this, difference_In_Days -> {
+            isDateToReturnCar(difference_In_Days);
+            checkRentOnFine(difference_In_Days);
+        });
     }
     
     private void checkDateToIssuingCar(){
@@ -113,6 +116,13 @@ public class RentDetailActivity extends AppCompatActivity {
     private void isDateToReturnCar(long difference_In_Days){
         if(difference_In_Days >= 0){
             returnStationRent.setEnabled(true);
+        }
+    }
+
+    private void checkRentOnFine(long difference_In_Days){
+        if(difference_In_Days >= 1){
+            int fine = rent.getFines() + 100;
+            carViewModel.updateFineRent(rent.getId(), fine);
         }
     }
 
