@@ -41,6 +41,9 @@ dependencies {
     //Firestore
     implementation("com.google.firebase:firebase-firestore")
 
+    //Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging:23.4.0'
+
     //Cloud Storage
     implementation("com.google.firebase:firebase-storage")
 
