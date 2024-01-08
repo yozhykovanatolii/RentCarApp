@@ -46,9 +46,11 @@ public class RentFragment extends Fragment implements RecyclerViewInterface {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rentList = view.findViewById(R.id.rentList);
+        // Subscribe on FCM.......
+
+        //.......
         initData();
     }
-
 
     private void initData(){
         carViewModel.getClientRents().observe(requireActivity(), rents -> {
