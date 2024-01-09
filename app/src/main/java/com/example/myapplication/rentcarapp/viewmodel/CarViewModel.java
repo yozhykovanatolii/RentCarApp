@@ -111,6 +111,10 @@ public class CarViewModel extends ViewModel {
         carRepository.updateFineRent(idRent, fine);
     }
 
+    public void updateRentStatus(String idRent, String status){
+        carRepository.updateRentStatus(idRent, status);
+    }
+
     public LiveData<Boolean> isDriverLicenceNumberWriteCorrect(String driverLicenceNumber){
         if(isDriverLicenceNumberCorrect(driverLicenceNumber)){
             return new MutableLiveData<>(true);

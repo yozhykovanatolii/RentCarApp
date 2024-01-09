@@ -111,6 +111,7 @@ public class RentDetailActivity extends AppCompatActivity {
             paymentOfThePenalty(rent.getFines());
         }else{
             showMessageAboutRent("Rent " + rent.getId() + " was deleted");
+
             returnToMainWindow();
         }
     }
@@ -131,6 +132,7 @@ public class RentDetailActivity extends AppCompatActivity {
     }
 
     private void showMessageAboutRent(String message){
+        carViewModel.updateRentStatus(rent.getId(), "Returned");
         carViewModel.deleteRent(rent.getId());
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }

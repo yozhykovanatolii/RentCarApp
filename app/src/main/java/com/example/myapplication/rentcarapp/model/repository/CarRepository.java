@@ -322,6 +322,10 @@ public class CarRepository {
         firestore.collection("rents").document(idRent).update("fines", fine).addOnSuccessListener(unused -> Log.i("Success", "Fines updated")).addOnFailureListener(e -> Log.i("Error", "Update fines exception: ", e));
     }
 
+    public void updateRentStatus(String idRent, String status){
+        firestore.collection("rents").document(idRent).update("status", status).addOnSuccessListener(unused -> Log.i("Success", "Status updated")).addOnFailureListener(e -> Log.i("Error", "Update status exception: ", e));
+    }
+
     public void createCreditCard(CreditCard creditCard){
         firestore.collection("creditCards").document(creditCard.getNumberCard()).set(creditCard).addOnCompleteListener(task -> {
             if(!task.isSuccessful()){
