@@ -99,6 +99,10 @@ public class CarViewModel extends ViewModel {
         carRepository.createDriverLicence(driverLicence);
     }
 
+    public void getRegistrationToken(){
+        carRepository.getRegistrationToken();
+    }
+
     public void createRent(Rent rent){
         carRepository.createRent(rent);
     }

@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -316,6 +317,16 @@ public class CarRepository {
             });
         }
         return rents;
+    }
+
+    public void getRegistrationToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                Log.i("Token", task.getResult());
+            }else{
+                Log.i("TokenError", "Fetching FCM registration token failed", task.getException());
+            }
+        });
     }
 
     public void updateFineRent(String idRent, int fine){

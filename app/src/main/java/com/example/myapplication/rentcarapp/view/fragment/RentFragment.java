@@ -47,7 +47,7 @@ public class RentFragment extends Fragment implements RecyclerViewInterface {
         super.onViewCreated(view, savedInstanceState);
         rentList = view.findViewById(R.id.rentList);
         // Subscribe on FCM.......
-
+        carViewModel.getRegistrationToken();
         //.......
         initData();
     }

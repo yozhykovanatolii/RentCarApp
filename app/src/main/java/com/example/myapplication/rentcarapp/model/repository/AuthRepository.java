@@ -106,8 +106,6 @@ public class AuthRepository {
         return clientEmail;
     }
 
-
-
     public LiveData<String> getClientTokenByEmail(String email){
         MutableLiveData<String> userMutableLiveData = new MutableLiveData<>();
         firestore.collection("clients").whereEqualTo("email", email).get().addOnCompleteListener(task -> {
