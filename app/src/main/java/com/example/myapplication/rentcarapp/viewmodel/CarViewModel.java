@@ -1,7 +1,10 @@
 package com.example.myapplication.rentcarapp.viewmodel;
 
+import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -21,11 +24,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CarViewModel extends ViewModel {
+public class CarViewModel extends AndroidViewModel {
     private CarRepository carRepository;
 
-    public CarViewModel(){
-        carRepository = new CarRepository();
+    public CarViewModel(Application application){
+        super(application);
+        carRepository = new CarRepository(application);
     }
 
     public LiveData<Client> getClient(){
@@ -101,6 +105,10 @@ public class CarViewModel extends ViewModel {
 
     public void getRegistrationToken(){
         carRepository.getRegistrationToken();
+    }
+
+    public void createWorkRequest(List<Rent> rents){
+        carRepository.createWorkRequest(rents);
     }
 
     public void createRent(Rent rent){

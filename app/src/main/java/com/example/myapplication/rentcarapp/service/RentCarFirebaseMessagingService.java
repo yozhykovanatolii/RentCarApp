@@ -1,7 +1,6 @@
 package com.example.myapplication.rentcarapp.service;
 
 import android.Manifest;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -42,9 +41,7 @@ public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
         Rent rent = new Rent();
-
-
-
+        //Rent rent = message.getData().get("Rents");
         int notificationID = new Random().nextInt();
         Intent intent = getIntent(rent);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);

@@ -1,10 +1,18 @@
 package com.example.myapplication.rentcarapp.model.repository;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import com.example.myapplication.rentcarapp.model.firestore.models.Bank;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
@@ -13,6 +21,7 @@ import com.example.myapplication.rentcarapp.model.firestore.models.CreditCard;
 import com.example.myapplication.rentcarapp.model.firestore.models.DriverLicence;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
 import com.example.myapplication.rentcarapp.model.firestore.models.Station;
+import com.example.myapplication.rentcarapp.service.CheckRentWorker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,15 +38,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class CarRepository {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
+    private Context context;
 
-    public CarRepository(){
+    public CarRepository(Context context){
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
+        this.context = context;
     }
 
     public LiveData<Client> getClient(){
@@ -327,6 +340,25 @@ public class CarRepository {
                 Log.i("TokenError", "Fetching FCM registration token failed", task.getException());
             }
         });
+    }
+
+    public void createWorkRequest(List<Rent> rents){
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("Data", rents);
+        WorkRequest workRequest = new PeriodicWorkRequest.Builder(CheckRentWorker.class, 1, TimeUnit.HOURS)
+                .setInputData(new Data.Builder()
+                        .putAll(dataMap)
+                        .build())
+                .setConstraints(constraints)
+                .build();
+         sendRequest(workRequest);
+    }
+
+    private void sendRequest(WorkRequest workRequest){
+        WorkManager.getInstance(context).enqueue(workRequest);
     }
 
     public void updateFineRent(String idRent, int fine){
