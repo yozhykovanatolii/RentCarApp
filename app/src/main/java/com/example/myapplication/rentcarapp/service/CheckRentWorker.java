@@ -54,7 +54,7 @@ public class CheckRentWorker extends Worker {
 
     private boolean checkDifferenceBetweenTwoDates(String date){
         long difference_In_Days = checkDate(date);
-        return difference_In_Days >= 0;
+        return difference_In_Days <= 0;
     }
 
     private long checkDate(String date){

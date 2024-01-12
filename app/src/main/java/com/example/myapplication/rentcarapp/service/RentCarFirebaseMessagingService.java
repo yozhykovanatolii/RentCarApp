@@ -32,11 +32,9 @@ import java.util.Objects;
 import java.util.Random;
 
 public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
-    private FirebaseFirestore firestore;
     private FirebaseUser firebaseUser;
 
     public RentCarFirebaseMessagingService() {
-        firestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
@@ -54,13 +52,7 @@ public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(@NonNull String token) {
-        sendRegistrationTokenToServer(token);
-    }
-
-    private void sendRegistrationTokenToServer(String token) {
         Log.i("Token", token);
-        String idClient = Objects.requireNonNull(firebaseUser).getUid();
-        firestore.collection("users").document(idClient).update("fcmToken", token).addOnSuccessListener(unused -> Log.i("Success", "Registration token updated")).addOnFailureListener(e -> Log.i("Error", "Update registration token exception: ", e));
     }
 
     private Intent getIntent(Rent rent){

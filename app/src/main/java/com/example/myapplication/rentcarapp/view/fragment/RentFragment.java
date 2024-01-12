@@ -52,7 +52,6 @@ public class RentFragment extends Fragment implements RecyclerViewInterface {
     private void initData(){
         carViewModel.getClientRents().observe(requireActivity(), rents -> {
             if(rents != null){
-                carViewModel.getRegistrationToken();
                 initRecyclerView(rents);
                 carViewModel.createWorkRequest(rents);
             }

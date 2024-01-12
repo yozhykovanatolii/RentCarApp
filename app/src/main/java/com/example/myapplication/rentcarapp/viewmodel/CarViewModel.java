@@ -103,8 +103,12 @@ public class CarViewModel extends AndroidViewModel {
         carRepository.createDriverLicence(driverLicence);
     }
 
-    public void getRegistrationToken(){
-         carRepository.getRegistrationToken();
+    public LiveData<String> getRegistrationToken(){
+         return carRepository.getRegistrationToken();
+    }
+
+    public void updateFcmToken(String fcmToken){
+        carRepository.updateFcmToken(fcmToken);
     }
 
     public void createWorkRequest(List<Rent> rents){
@@ -201,6 +205,7 @@ public class CarViewModel extends AndroidViewModel {
         }
         return differenceBetweenDates;
     }
+
 
     public LiveData<Integer> calculateDifferenceBetweenTwoDates(String startDate, String endDate, int price){
         MutableLiveData<Integer> priceRent = new MutableLiveData<>();

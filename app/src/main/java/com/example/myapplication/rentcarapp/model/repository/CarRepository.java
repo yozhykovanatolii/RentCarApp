@@ -233,7 +233,8 @@ public class CarRepository {
         if(firebaseUser != null){
             String token = firebaseUser.getUid();
             firestore.collection("clients").document(token).get().addOnCompleteListener(task -> {
-                if(task.isSuccessful() && task.getResult().exists()){
+                if(task.isSuccessful() && !task.getResult().toObject(Client.class).getCards().isEmpty()){
+                    Log.i("Success", "Credit cards exist");
                     creditsCards.setValue(Objects.requireNonNull(task.getResult().toObject(Client.class)).getCards());
                 }else{
                     creditsCards.setValue(null);
@@ -332,14 +333,24 @@ public class CarRepository {
         return rents;
     }
 
-    public void getRegistrationToken(){
+    public LiveData<String> getRegistrationToken(){
+        MutableLiveData<String> registrationToken = new MutableLiveData<>();
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                Log.i("Success", "Registration token: " + task.getResult());
+                registrationToken.setValue(task.getResult());
             }else{
                 Log.i("TokenError", "Fetching FCM registration token failed", task.getException());
             }
         });
+        return registrationToken;
+    }
+
+    public void updateFcmToken(String fcmToken){
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+            String userID = firebaseUser.getUid();
+            firestore.collection("users").document(userID).update("fcmToken", fcmToken).addOnSuccessListener(unused -> Log.i("Success", "Field fcmToken was updated")).addOnFailureListener(e -> Log.i("UpdateTokenError", "Update FCM registration token failed", e));
+        }
     }
 
     public void createWorkRequest(List<Rent> rents){
