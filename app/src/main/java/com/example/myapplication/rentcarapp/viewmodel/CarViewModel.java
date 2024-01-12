@@ -104,7 +104,7 @@ public class CarViewModel extends AndroidViewModel {
     }
 
     public void getRegistrationToken(){
-        carRepository.getRegistrationToken();
+         carRepository.getRegistrationToken();
     }
 
     public void createWorkRequest(List<Rent> rents){

@@ -1,10 +1,15 @@
 package com.example.myapplication.rentcarapp.service;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
+import com.example.myapplication.rentcarapp.model.network.ApiPoint;
+import com.example.myapplication.rentcarapp.model.network.NetworkConnect;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 
@@ -18,6 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CheckRentWorker extends Worker {
@@ -64,17 +74,23 @@ public class CheckRentWorker extends Worker {
     private void sendMessage(Rent rent){
         Gson gson = new Gson();
         String rentJsonString = gson.toJson(rent);
-        Map<String, String> dataMap = new HashMap<>();
-        dataMap.put("rent", rentJsonString);
+        String payload = convertJsonToString(rentJsonString);
+        NetworkConnect.getInstance().getApi().sendNotification(payload).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if(response.isSuccessful()){
+                    System.out.println(response.body());
+                }
+            }
 
-        /*
-        RemoteMessage remoteMessage = new RemoteMessage.Builder("515505838421@gcm.googleapis.com")
-                .setData(dataMap)
-                .build();
-       */
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.i("ErrorPost", Objects.requireNonNull(t.getMessage()));
+            }
+        });
     }
 
-    private JSONObject convertToJson(String rentJsonString){
+    private String convertJsonToString(String rentJsonString){
         JSONObject payload = new JSONObject();
         try{
             JSONObject dataObject = new JSONObject();
@@ -83,6 +99,6 @@ public class CheckRentWorker extends Worker {
         }catch (JSONException exception){
             exception.printStackTrace();
         }
-        return payload;
+        return payload.toString();
     }
 }

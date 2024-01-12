@@ -335,7 +335,7 @@ public class CarRepository {
     public void getRegistrationToken(){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                Log.i("Token", task.getResult());
+                Log.i("Success", "Registration token: " + task.getResult());
             }else{
                 Log.i("TokenError", "Fetching FCM registration token failed", task.getException());
             }

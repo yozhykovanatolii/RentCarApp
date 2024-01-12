@@ -18,12 +18,15 @@ import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
 import com.example.myapplication.rentcarapp.view.activity.RentDetailActivity;
 import com.example.myapplication.rentcarapp.view.activity.SplashScreenActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
 import java.util.Objects;
 import java.util.Random;
@@ -40,8 +43,9 @@ public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
-        Rent rent = new Rent();
-        //Rent rent = message.getData().get("Rents");
+        Gson gson = new Gson();
+        String data = message.getData().get("rent");
+        Rent rent = gson.fromJson(data, Rent.class);
         int notificationID = new Random().nextInt();
         Intent intent = getIntent(rent);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
@@ -56,15 +60,7 @@ public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
     private void sendRegistrationTokenToServer(String token) {
         Log.i("Token", token);
         String idClient = Objects.requireNonNull(firebaseUser).getUid();
-        firestore.collection("rents").whereEqualTo("client", idClient).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                    updateRegistrationTokenInRents(queryDocumentSnapshot.toObject(Rent.class).getId(), token);
-                }
-            } else {
-                Log.i("Errors", "Exception:", task.getException());
-            }
-        });
+        firestore.collection("users").document(idClient).update("fcmToken", token).addOnSuccessListener(unused -> Log.i("Success", "Registration token updated")).addOnFailureListener(e -> Log.i("Error", "Update registration token exception: ", e));
     }
 
     private Intent getIntent(Rent rent){
@@ -77,10 +73,6 @@ public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
-    }
-
-    private void updateRegistrationTokenInRents(String idRent, String token) {
-        firestore.collection("rents").document(idRent).update("fcmToken", token).addOnSuccessListener(unused -> Log.i("Success", "Registration token updated")).addOnFailureListener(e -> Log.i("Error", "Update registration token exception: ", e));
     }
 
     private void sendNotification(PendingIntent pendingIntent, Rent rent, int notificationID) {
