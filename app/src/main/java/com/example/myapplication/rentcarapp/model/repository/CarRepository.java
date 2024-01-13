@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -357,15 +358,17 @@ public class CarRepository {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
+        Gson gson = new Gson();
+        String rentsJson = gson.toJson(rents);
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("Data", rents);
+        dataMap.put("Data", rentsJson);
         WorkRequest workRequest = new PeriodicWorkRequest.Builder(CheckRentWorker.class, 1, TimeUnit.HOURS)
                 .setInputData(new Data.Builder()
                         .putAll(dataMap)
                         .build())
                 .setConstraints(constraints)
                 .build();
-         sendRequest(workRequest);
+        sendRequest(workRequest);
     }
 
     private void sendRequest(WorkRequest workRequest){

@@ -7,11 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
-import com.example.myapplication.rentcarapp.model.network.ApiPoint;
 import com.example.myapplication.rentcarapp.model.network.NetworkConnect;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +42,9 @@ public class CheckRentWorker extends Worker {
     }
 
     private void checkRentsTerm(){
-        List<Rent> rents = (List<Rent>) getInputData().getKeyValueMap().get("Data");
+        Gson gson = new Gson();
+        String rentList = (String) getInputData().getKeyValueMap().get("Data");
+        List<Rent> rents = gson.fromJson(rentList, new TypeToken<List<Rent>>() {}.getType());
         for (Rent rent: rents){
             if(checkDifferenceBetweenTwoDates(rent.getReturnDate())){
                 sendMessage(rent);
