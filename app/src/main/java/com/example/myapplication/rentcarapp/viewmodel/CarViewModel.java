@@ -103,6 +103,10 @@ public class CarViewModel extends AndroidViewModel {
         carRepository.createDriverLicence(driverLicence);
     }
 
+    public LiveData<String> getClientsUserName(){
+        return carRepository.getClientsUsername();
+    }
+
     public LiveData<String> getRegistrationToken(){
          return carRepository.getRegistrationToken();
     }
@@ -111,8 +115,8 @@ public class CarViewModel extends AndroidViewModel {
         carRepository.updateFcmToken(fcmToken);
     }
 
-    public void createWorkRequest(List<Rent> rents){
-        carRepository.createWorkRequest(rents);
+    public void createWorkRequest(List<Rent> rents, String token){
+        carRepository.createWorkRequest(rents, token);
     }
 
     public void createRent(Rent rent){

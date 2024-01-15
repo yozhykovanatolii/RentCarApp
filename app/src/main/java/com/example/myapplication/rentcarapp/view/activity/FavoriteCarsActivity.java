@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.myapplication.rentcarapp.R;
@@ -37,7 +38,7 @@ public class FavoriteCarsActivity extends AppCompatActivity implements RecyclerV
         setContentView(R.layout.activity_favorite_cars);
         favoriteCars = findViewById(R.id.favoriteCars);
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
+        //initBroadcastReceiver();
         initData();
     }
 
@@ -48,7 +49,7 @@ public class FavoriteCarsActivity extends AppCompatActivity implements RecyclerV
 
     private void initData(){
         carViewModel.getFavoriteClientsCars().observe(this, strings -> {
-            if(strings != null){
+            if(!strings.isEmpty()){
                 getCars(strings);
             }
         });
@@ -69,7 +70,7 @@ public class FavoriteCarsActivity extends AppCompatActivity implements RecyclerV
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        //unregisterReceiver(broadcastReceiver);
     }
 
     @Override

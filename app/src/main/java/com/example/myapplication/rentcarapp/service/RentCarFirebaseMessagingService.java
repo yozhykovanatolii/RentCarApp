@@ -41,9 +41,10 @@ public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
+        Log.i("Status", "Message was received");
         Gson gson = new Gson();
-        String data = message.getData().get("rent");
-        Rent rent = gson.fromJson(data, Rent.class);
+        String rentInString = message.getData().get("rent");
+        Rent rent = gson.fromJson(rentInString, Rent.class);
         int notificationID = new Random().nextInt();
         Intent intent = getIntent(rent);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
@@ -56,13 +57,8 @@ public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private Intent getIntent(Rent rent){
-        Intent intent;
-        if(firebaseUser != null){
-            intent = new Intent(this, RentDetailActivity.class);
-            intent.putExtra("Rent", rent);
-        }else{
-            intent = new Intent(this, SplashScreenActivity.class);
-        }
+        Intent intent = new Intent(this, RentDetailActivity.class);
+        intent.putExtra("Rent", rent);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }

@@ -76,6 +76,22 @@ public class AuthRepository {
         return userMutableLiveData;
     }
 
+    public LiveData<String> getClientsUsername(){
+        MutableLiveData<String> userName = new MutableLiveData<>();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+           firestore.collection("users").document(firebaseUser.getUid()).get().addOnCompleteListener(task -> {
+               if(task.isSuccessful() && task.getResult().exists()){
+                   userName.setValue(Objects.requireNonNull(task.getResult().toObject(User.class)).getUsername());
+               }else{
+                   userName.setValue(null);
+                   Log.i("Errors", "Exception", task.getException());
+               }
+           });
+        }
+        return userName;
+    }
+
     public LiveData<User> getUserByUsernameAndPassword(String username, String password){
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
         firestore.collection("users").whereEqualTo("username", username).whereEqualTo("password", password).get().addOnCompleteListener(task -> {
@@ -174,6 +190,7 @@ public class AuthRepository {
         AuthCredential credential = EmailAuthProvider.getCredential(email, password);
         if(firebaseUser != null){
             firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
+                Log.i("Status", "Perfect");
                 if (task.isSuccessful()) {
                     firebaseUser.updateEmail(newEmail);
                     firebaseUser.updatePassword(newPassword);

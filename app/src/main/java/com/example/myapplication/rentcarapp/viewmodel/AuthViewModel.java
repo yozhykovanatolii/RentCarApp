@@ -28,8 +28,6 @@ public class AuthViewModel extends ViewModel {
     }
 
 
-
-
     public LiveData<Boolean> isEmailAndPasswordWriteCorrect(String email, String newPassword){
         if(isEmailWriteCorrect(email) && isPasswordLargeThanOrEqualEight(newPassword)){
             checkEmailAndPassword.setValue(true);
@@ -81,6 +79,10 @@ public class AuthViewModel extends ViewModel {
             checkNewPassword.setValue(false);
         }
         return checkNewPassword;
+    }
+
+    public LiveData<String> getClientsUserName(){
+        return authRepository.getClientsUsername();
     }
 
     public LiveData<User> getUserByUsername(String username){

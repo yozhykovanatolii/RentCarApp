@@ -8,6 +8,8 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
 import com.example.myapplication.rentcarapp.model.network.NetworkConnect;
+import com.example.myapplication.rentcarapp.model.network.NotificationData;
+import com.example.myapplication.rentcarapp.model.network.NotificationSender;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,6 +25,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,10 +48,11 @@ public class CheckRentWorker extends Worker {
     private void checkRentsTerm(){
         Gson gson = new Gson();
         String rentList = (String) getInputData().getKeyValueMap().get("Data");
+        String token = (String) getInputData().getKeyValueMap().get("Token");
         List<Rent> rents = gson.fromJson(rentList, new TypeToken<List<Rent>>() {}.getType());
         for (Rent rent: rents){
             if(checkDifferenceBetweenTwoDates(rent.getReturnDate())){
-                sendMessage(rent);
+                sendMessage(rent, token);
             }
         }
     }
@@ -71,34 +76,21 @@ public class CheckRentWorker extends Worker {
         return difference_In_Days;
     }
 
-    private void sendMessage(Rent rent){
-        Gson gson = new Gson();
-        String rentJsonString = gson.toJson(rent);
-        String payload = convertJsonToString(rentJsonString);
-        NetworkConnect.getInstance().getApi().sendNotification(payload).enqueue(new Callback<String>() {
+    private void sendMessage(Rent rent, String token){
+        NotificationSender notification = new NotificationSender(token, new NotificationData(rent));
+        NetworkConnect.getInstance().getApi().sendNotification(notification).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    System.out.println(response.body());
+                    Log.i("Success", response.message());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("ErrorPost", Objects.requireNonNull(t.getMessage()));
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.i("Failed", "Error");
             }
         });
     }
 
-    private String convertJsonToString(String rentJsonString){
-        JSONObject payload = new JSONObject();
-        try{
-            JSONObject dataObject = new JSONObject();
-            dataObject.put("rent", rentJsonString);
-            payload.put("data", dataObject);
-        }catch (JSONException exception){
-            exception.printStackTrace();
-        }
-        return payload.toString();
-    }
 }

@@ -21,6 +21,7 @@ import com.example.myapplication.rentcarapp.model.firestore.models.CreditCard;
 import com.example.myapplication.rentcarapp.model.firestore.models.DriverLicence;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
 import com.example.myapplication.rentcarapp.model.firestore.models.Station;
+import com.example.myapplication.rentcarapp.model.firestore.models.User;
 import com.example.myapplication.rentcarapp.service.CheckRentWorker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -103,15 +104,12 @@ public class CarRepository {
 
     public LiveData<List<Car>> getCarsById(List<String> ids){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
-        firestore.collection("cars").whereIn("ID", ids).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful() && !task.getResult().isEmpty()){
-                    cars.setValue(task.getResult().toObjects(Car.class));
-                }else{
-                    cars.setValue(null);
-                    Log.i("Errors", "Exception:", task.getException());
-                }
+        firestore.collection("cars").whereIn("ID", ids).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
+                cars.setValue(task.getResult().toObjects(Car.class));
+            }else{
+                cars.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
             }
         });
         return cars;
@@ -140,6 +138,7 @@ public class CarRepository {
                 if(task.isSuccessful()){
                     favoritesCars.setValue(Objects.requireNonNull(task.getResult().toObject(Client.class)).getCars());
                 }else{
+                    favoritesCars.setValue(null);
                     Log.i("Errors", "Exception:", task.getException());
                 }
             });
@@ -317,6 +316,22 @@ public class CarRepository {
         return isCarWasAddedInRent;
     }
 
+    public LiveData<String> getClientsUsername(){
+        MutableLiveData<String> userName = new MutableLiveData<>();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+            firestore.collection("users").document(firebaseUser.getUid()).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful() && task.getResult().exists()){
+                    userName.setValue(Objects.requireNonNull(task.getResult().toObject(User.class)).getUsername());
+                }else{
+                    userName.setValue(null);
+                    Log.i("Errors", "Exception", task.getException());
+                }
+            });
+        }
+        return userName;
+    }
+
     public LiveData<List<Rent>> getClientRents(){
         MutableLiveData<List<Rent>> rents = new MutableLiveData<>();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -354,7 +369,7 @@ public class CarRepository {
         }
     }
 
-    public void createWorkRequest(List<Rent> rents){
+    public void createWorkRequest(List<Rent> rents, String token){
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
@@ -362,7 +377,8 @@ public class CarRepository {
         String rentsJson = gson.toJson(rents);
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("Data", rentsJson);
-        WorkRequest workRequest = new PeriodicWorkRequest.Builder(CheckRentWorker.class, 1, TimeUnit.HOURS)
+        dataMap.put("Token", token);
+        WorkRequest workRequest = new PeriodicWorkRequest.Builder(CheckRentWorker.class, 15, TimeUnit.MINUTES)
                 .setInputData(new Data.Builder()
                         .putAll(dataMap)
                         .build())

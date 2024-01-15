@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -60,8 +61,16 @@ public class AccountFragment extends Fragment {
     private void initData(){
         authViewModel.getClient().observe(requireActivity(), client -> {
             Picasso.get().load(client.getPhoto()).into(userAvatar);
-            //clientUsername.setText(client.getUser());
+            showClientUserName();
         });
+    }
+
+    private void showClientUserName(){
+       authViewModel.getClientsUserName().observe(requireActivity(), userName -> {
+           if(userName != null){
+               clientUsername.setText(userName);
+           }
+       });
     }
 
     public void clickCard(View view){
@@ -81,5 +90,7 @@ public class AccountFragment extends Fragment {
     }
 
 
-
+    private void onChanged(String userName) {
+        clientUsername.setText(userName);
+    }
 }

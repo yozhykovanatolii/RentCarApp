@@ -47,7 +47,7 @@ public class MyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_profile);
         initComponent();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        initBroadcastReceiver();
+        //initBroadcastReceiver();
         initClientsData();
         editUsername();
         editFullName();
@@ -271,7 +271,7 @@ public class MyProfileActivity extends AppCompatActivity {
             clientCurrent.setEmail(newEmail);
             clientCurrent.setFullName(fullName);
             clientCurrent.setPhoneNumber(phone);
-            authViewModel.saveImageInCloudStorage(clientCurrent);
+            //authViewModel.saveImageInCloudStorage(clientCurrent);
             hideErrorMessage();
             updateUser(email, newEmail, newPassword, username);
         }else{
@@ -315,7 +315,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        //unregisterReceiver(broadcastReceiver);
     }
 
     @Override

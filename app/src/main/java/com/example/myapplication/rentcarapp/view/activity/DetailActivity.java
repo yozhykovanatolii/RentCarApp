@@ -41,7 +41,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         car = (Car) getIntent().getSerializableExtra("Car");
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
+        //initBroadcastReceiver();
         initComponents();
         initData();
         checkCarByRent();
@@ -167,6 +167,6 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        //unregisterReceiver(broadcastReceiver);
     }
 }
