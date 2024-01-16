@@ -1,10 +1,18 @@
 package com.example.myapplication.rentcarapp.model.repository;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import com.example.myapplication.rentcarapp.model.firestore.models.Bank;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
@@ -13,6 +21,8 @@ import com.example.myapplication.rentcarapp.model.firestore.models.CreditCard;
 import com.example.myapplication.rentcarapp.model.firestore.models.DriverLicence;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
 import com.example.myapplication.rentcarapp.model.firestore.models.Station;
+import com.example.myapplication.rentcarapp.model.firestore.models.User;
+import com.example.myapplication.rentcarapp.service.CheckRentWorker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,20 +33,26 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class CarRepository {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
+    private Context context;
 
-    public CarRepository(){
+    public CarRepository(Context context){
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
+        this.context = context;
     }
 
     public LiveData<Client> getClient(){
@@ -88,15 +104,12 @@ public class CarRepository {
 
     public LiveData<List<Car>> getCarsById(List<String> ids){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
-        firestore.collection("cars").whereIn("ID", ids).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful() && !task.getResult().isEmpty()){
-                    cars.setValue(task.getResult().toObjects(Car.class));
-                }else{
-                    cars.setValue(null);
-                    Log.i("Errors", "Exception:", task.getException());
-                }
+        firestore.collection("cars").whereIn("ID", ids).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
+                cars.setValue(task.getResult().toObjects(Car.class));
+            }else{
+                cars.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
             }
         });
         return cars;
@@ -125,6 +138,7 @@ public class CarRepository {
                 if(task.isSuccessful()){
                     favoritesCars.setValue(Objects.requireNonNull(task.getResult().toObject(Client.class)).getCars());
                 }else{
+                    favoritesCars.setValue(null);
                     Log.i("Errors", "Exception:", task.getException());
                 }
             });
@@ -219,7 +233,8 @@ public class CarRepository {
         if(firebaseUser != null){
             String token = firebaseUser.getUid();
             firestore.collection("clients").document(token).get().addOnCompleteListener(task -> {
-                if(task.isSuccessful() && task.getResult().exists()){
+                if(task.isSuccessful() && !task.getResult().toObject(Client.class).getCards().isEmpty()){
+                    Log.i("Success", "Credit cards exist");
                     creditsCards.setValue(Objects.requireNonNull(task.getResult().toObject(Client.class)).getCards());
                 }else{
                     creditsCards.setValue(null);
@@ -301,6 +316,22 @@ public class CarRepository {
         return isCarWasAddedInRent;
     }
 
+    public LiveData<String> getClientsUsername(){
+        MutableLiveData<String> userName = new MutableLiveData<>();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+            firestore.collection("users").document(firebaseUser.getUid()).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful() && task.getResult().exists()){
+                    userName.setValue(Objects.requireNonNull(task.getResult().toObject(User.class)).getUsername());
+                }else{
+                    userName.setValue(null);
+                    Log.i("Errors", "Exception", task.getException());
+                }
+            });
+        }
+        return userName;
+    }
+
     public LiveData<List<Rent>> getClientRents(){
         MutableLiveData<List<Rent>> rents = new MutableLiveData<>();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -318,8 +349,54 @@ public class CarRepository {
         return rents;
     }
 
+    public LiveData<String> getRegistrationToken(){
+        MutableLiveData<String> registrationToken = new MutableLiveData<>();
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                registrationToken.setValue(task.getResult());
+            }else{
+                Log.i("TokenError", "Fetching FCM registration token failed", task.getException());
+            }
+        });
+        return registrationToken;
+    }
+
+    public void updateFcmToken(String fcmToken){
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+            String userID = firebaseUser.getUid();
+            firestore.collection("users").document(userID).update("fcmToken", fcmToken).addOnSuccessListener(unused -> Log.i("Success", "Field fcmToken was updated")).addOnFailureListener(e -> Log.i("UpdateTokenError", "Update FCM registration token failed", e));
+        }
+    }
+
+    public void createWorkRequest(List<Rent> rents, String token){
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        Gson gson = new Gson();
+        String rentsJson = gson.toJson(rents);
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("Data", rentsJson);
+        dataMap.put("Token", token);
+        WorkRequest workRequest = new PeriodicWorkRequest.Builder(CheckRentWorker.class, 15, TimeUnit.MINUTES)
+                .setInputData(new Data.Builder()
+                        .putAll(dataMap)
+                        .build())
+                .setConstraints(constraints)
+                .build();
+        sendRequest(workRequest);
+    }
+
+    private void sendRequest(WorkRequest workRequest){
+        WorkManager.getInstance(context).enqueue(workRequest);
+    }
+
     public void updateFineRent(String idRent, int fine){
         firestore.collection("rents").document(idRent).update("fines", fine).addOnSuccessListener(unused -> Log.i("Success", "Fines updated")).addOnFailureListener(e -> Log.i("Error", "Update fines exception: ", e));
+    }
+
+    public void updateRentStatus(String idRent, String status){
+        firestore.collection("rents").document(idRent).update("status", status).addOnSuccessListener(unused -> Log.i("Success", "Status updated")).addOnFailureListener(e -> Log.i("Error", "Update status exception: ", e));
     }
 
     public void createCreditCard(CreditCard creditCard){

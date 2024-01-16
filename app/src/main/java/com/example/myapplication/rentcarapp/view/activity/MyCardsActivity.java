@@ -33,7 +33,7 @@ public class MyCardsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_cards);
         cardsList = findViewById(R.id.cardsList);
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
+        //initBroadcastReceiver();
         initData();
     }
 
@@ -69,6 +69,6 @@ public class MyCardsActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        //unregisterReceiver(broadcastReceiver);
     }
 }

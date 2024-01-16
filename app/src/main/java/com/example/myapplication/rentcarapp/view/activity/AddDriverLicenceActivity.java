@@ -1,6 +1,7 @@
 package com.example.myapplication.rentcarapp.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
@@ -11,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
 import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AddDriverLicenceActivity extends AppCompatActivity {
@@ -106,7 +109,7 @@ public class AddDriverLicenceActivity extends AppCompatActivity {
         String driverLicence = driverLicenceNumber.getText().toString();
         String dateIssuing = dateIssuingDriverLicence.getText().toString();
         String dateValid = dateValidUntilDriverLicence.getText().toString();
-        if(checkDriverLicenceID(driverLicence).get() && checkDate(dateIssuing, dateValid)){
+        if(checkDriverLicenceID(driverLicence).get() && !checkDate(dateIssuing, dateValid)){
             hideErrorMessage();
             checkClientCreditCard(driverLicence, dateIssuing, dateValid);
         }else{
@@ -126,6 +129,12 @@ public class AddDriverLicenceActivity extends AppCompatActivity {
                 goToAddCreditCardActivity();
             }
         });
+    }
+
+    private void printClientsCreditCard(List<String> creditCards){
+        for(String creditCard: creditCards){
+            Log.i("CreditCardsClient", creditCard);
+        }
     }
 
     private void createDriverLicenceAndUpdateClientDriverLicence(DriverLicence driverLicence, String driverLicenceNum){

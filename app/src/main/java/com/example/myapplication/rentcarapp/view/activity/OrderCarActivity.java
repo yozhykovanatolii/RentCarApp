@@ -42,6 +42,7 @@ public class OrderCarActivity extends AppCompatActivity {
     String token = "";
     String tokenClient = "";
     int price = 0;
+    int totalSum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ public class OrderCarActivity extends AppCompatActivity {
         String stationIssuing = stationIssuingSpinner.getSelectedItem().toString();
         String stationReturn = stationReturnSpinner.getSelectedItem().toString();
         String id = String.valueOf(random.nextInt(10000));
-        Rent rent = new Rent(id, tokenClient, token, stationIssuing, stationReturn, startDate, startDate, endDate, price, price);
+        Rent rent = new Rent(id, tokenClient, token, stationIssuing, stationReturn, startDate, startDate, endDate, totalSum, totalSum);
         rent.setFines(0);
         rent.setStatus("No return");
         carViewModel.createRent(rent);
@@ -158,6 +159,7 @@ public class OrderCarActivity extends AppCompatActivity {
 
     private void calculate(String startDate, String endDate){
         carViewModel.calculateDifferenceBetweenTwoDates(startDate, endDate, price).observe(this, integer -> {
+            totalSum = integer;
             sum.setText(integer + " ₴");
             totalAmountText.setText(integer + " ₴");
         });

@@ -100,7 +100,7 @@ public class RentDetailActivity extends AppCompatActivity {
     }
 
     private void isCanCancelRent(long difference_In_Days){
-        if(difference_In_Days >= 2){
+        if(difference_In_Days <= -2){
             cancelRent.setEnabled(false);
             cancelRent.setVisibility(View.GONE);
         }
@@ -131,6 +131,7 @@ public class RentDetailActivity extends AppCompatActivity {
     }
 
     private void showMessageAboutRent(String message){
+        carViewModel.updateRentStatus(rent.getId(), "Returned");
         carViewModel.deleteRent(rent.getId());
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
@@ -141,13 +142,13 @@ public class RentDetailActivity extends AppCompatActivity {
     }
 
     private void isDateToReturnCar(long difference_In_Days){
-        if(difference_In_Days >= 0){
+        if(difference_In_Days <= 0){
             returnStationRent.setEnabled(true);
         }
     }
 
     private void checkRentOnFine(long difference_In_Days){
-        if(difference_In_Days >= 1){
+        if(difference_In_Days <= -1){
             int fine = rent.getFines() + 100;
             carViewModel.updateFineRent(rent.getId(), fine);
         }

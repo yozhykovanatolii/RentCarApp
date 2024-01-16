@@ -38,11 +38,24 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
-    //Firestore
+    //Firebase Firestore
     implementation("com.google.firebase:firebase-firestore")
 
-    //Cloud Storage
+    //Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging:23.4.0'
+
+    //Firebase Cloud Storage
     implementation("com.google.firebase:firebase-storage")
+
+    //WorkManager
+    implementation 'androidx.work:work-runtime:2.9.0'
+
+    //Gson
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10'
 
     //Volley and Picasso
     implementation 'com.android.volley:volley:1.2.1'

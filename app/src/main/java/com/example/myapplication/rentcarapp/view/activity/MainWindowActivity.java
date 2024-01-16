@@ -39,6 +39,7 @@ public class MainWindowActivity extends AppCompatActivity {
         cars = (List<Car>) getIntent().getSerializableExtra("FilterCar");
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
         initBroadcastReceiver();
+        getRegistrationToken();
     }
 
     private void initBroadcastReceiver(){
@@ -52,6 +53,15 @@ public class MainWindowActivity extends AppCompatActivity {
                     .replace(R.id.fragmentContainer, HomeFragment.class, null)
                     .commit();
         }
+    }
+
+    private void getRegistrationToken(){
+        carViewModel.getRegistrationToken().observe(this, this::updateFcmTokenInUsers);
+    }
+
+    private void updateFcmTokenInUsers(String fcmToken){
+        System.out.println(fcmToken);
+        carViewModel.updateFcmToken(fcmToken);
     }
 
     public List<Car> getCars() {

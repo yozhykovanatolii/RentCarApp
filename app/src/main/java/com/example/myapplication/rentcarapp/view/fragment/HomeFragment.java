@@ -154,7 +154,15 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         carViewModel.getClient().observe(requireActivity(), client -> {
             if(client != null){
                 Picasso.get().load(client.getPhoto()).into(homeAvatar);
-                //homeUsername.setText(client.getUser());
+                showClientUserName();
+            }
+        });
+    }
+
+    private void showClientUserName(){
+        carViewModel.getClientsUserName().observe(requireActivity(), userName -> {
+            if(userName != null){
+                homeUsername.setText(userName);
             }
         });
     }
