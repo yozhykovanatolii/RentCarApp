@@ -41,7 +41,9 @@ public class CheckRentWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Log.i("CheckRentWorker", "Work is running");
         checkRentsTerm();
+        Log.i("CheckRentWorker", "Work was done");
         return Result.success();
     }
 
@@ -82,7 +84,7 @@ public class CheckRentWorker extends Worker {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    Log.i("Success", response.message());
+                    Log.i("Success", "It is working");
                 }
             }
 
@@ -92,5 +94,4 @@ public class CheckRentWorker extends Worker {
             }
         });
     }
-
 }

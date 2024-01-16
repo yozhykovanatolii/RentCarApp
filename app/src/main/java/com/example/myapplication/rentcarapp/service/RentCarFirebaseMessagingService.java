@@ -17,26 +17,14 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
 import com.example.myapplication.rentcarapp.view.activity.RentDetailActivity;
-import com.example.myapplication.rentcarapp.view.activity.SplashScreenActivity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 
-import java.util.Objects;
+
 import java.util.Random;
 
 public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
-    private FirebaseUser firebaseUser;
-
-    public RentCarFirebaseMessagingService() {
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    }
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
@@ -75,9 +63,9 @@ public class RentCarFirebaseMessagingService extends FirebaseMessagingService {
 
     private NotificationCompat.Builder createNotification(PendingIntent pendingIntent, Rent rent){
         return new NotificationCompat.Builder(this, "CHANNEL_ID")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.baseline_car_rental_24)
                 .setContentTitle("Rental period expires")
-                .setContentText("Your " + rent.getCar() + " rental car is expiring. The car must be returned")
+                .setContentText("The car " + rent.getCar() + " must be returned")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
