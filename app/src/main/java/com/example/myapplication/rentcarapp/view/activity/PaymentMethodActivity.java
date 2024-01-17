@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,7 +23,15 @@ import com.example.myapplication.rentcarapp.model.firestore.models.CreditCard;
 import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
 import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.List;
+
+import co.paystack.android.Paystack;
+import co.paystack.android.PaystackSdk;
+import co.paystack.android.Transaction;
+import co.paystack.android.model.Card;
+import co.paystack.android.model.Charge;
 
 public class PaymentMethodActivity extends AppCompatActivity implements PaymentMethodInterface {
     RecyclerView recyclerView;
@@ -71,9 +80,38 @@ public class PaymentMethodActivity extends AppCompatActivity implements PaymentM
         if(creditCard == null){
             Toast.makeText(this, "Choose payment method", Toast.LENGTH_LONG).show();
         }else{
-            Intent intent = new Intent(this, SuccessfulActivity.class);
-            startActivity(intent);
+            performCard();
         }
+    }
+
+    private void performCard(){
+        String[] cardExpiryArray = creditCard.getValidDate().split("/");
+        int expiryMonth = Integer.parseInt(cardExpiryArray[0]);
+        int expiryYear = Integer.parseInt(cardExpiryArray[1]);
+        Card card = new Card(creditCard.getNumberCard(), expiryMonth, expiryYear, creditCard.getSpecialCode());
+        Charge charge = new Charge();
+        charge.setCard(card);
+        chargeCard(charge);
+    }
+
+    private void chargeCard(Charge charge){
+        PaystackSdk.chargeCard(this, charge, new Paystack.TransactionCallback() {
+            @Override
+            public void onSuccess(Transaction transaction) {
+                Intent intent = new Intent(PaymentMethodActivity.this, SuccessfulActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void beforeValidate(Transaction transaction) {
+                Log.i("PaymentMethodActivity", "Before validate: " + transaction.getReference());
+            }
+
+            @Override
+            public void onError(Throwable error, Transaction transaction) {
+                Toast.makeText(getApplicationContext(), "Something was happened. Error", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
