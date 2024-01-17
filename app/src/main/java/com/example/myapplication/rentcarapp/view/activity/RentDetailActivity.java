@@ -117,7 +117,7 @@ public class RentDetailActivity extends AppCompatActivity {
 
     private void paymentOfThePenalty(int fines){
         showMessageAboutRent("Rent " + rent.getId() + " was deleted");
-        goToPaymentMethodActivity();
+        goToPaymentMethodActivity(fines);
     }
 
     public void onCancelRent(View view){
@@ -125,8 +125,9 @@ public class RentDetailActivity extends AppCompatActivity {
         returnToMainWindow();
     }
 
-    private void goToPaymentMethodActivity(){
+    private void goToPaymentMethodActivity(int fines){
         Intent intent = new Intent(this, PaymentMethodActivity.class);
+        intent.putExtra("Amount", fines);
         startActivity(intent);
     }
 
