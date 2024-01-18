@@ -40,13 +40,14 @@ public class PaymentMethodActivity extends AppCompatActivity implements PaymentR
     }
 
     private void startPayment(){
+        amount *= 0.026;
         try {
             JSONObject options = new JSONObject();
             options.put("name", "Rent Car");
             options.put("image", "https://st2.depositphotos.com/7752738/11627/v/950/depositphotos_116276226-stock-illustration-rent-a-car-agency-vector.jpg");
             options.put("theme.color", "#3399cc");
             options.put("currency", "USD");
-            options.put("amount", amount * 0.026 * 100);
+            options.put("amount", amount * 100);
             checkout.open(this, options);
         } catch(Exception e) {
             Log.e("Error", "Error in starting Razorpay Checkout", e);
