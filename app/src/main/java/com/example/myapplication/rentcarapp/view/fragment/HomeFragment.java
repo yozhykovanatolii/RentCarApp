@@ -37,7 +37,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class HomeFragment extends Fragment implements RecyclerViewInterface {
     RecyclerView carList;
     SearchView searchView;

@@ -31,6 +31,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class OrderCarActivity extends AppCompatActivity {
     HashMap<String, Integer> dataAboutCar;
     Spinner stationIssuingSpinner, stationReturnSpinner;

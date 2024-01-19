@@ -23,6 +23,9 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ResetPasswordActivity extends AppCompatActivity {
     TextInputEditText resetNewPassword, resetConfirmPassword;
     TextView incorrect_newPassword, incorrect_confirmedPassword;

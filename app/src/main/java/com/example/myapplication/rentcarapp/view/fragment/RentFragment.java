@@ -24,6 +24,9 @@ import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class RentFragment extends Fragment implements RecyclerViewInterface {
     RecyclerView rentList;
     CarViewModel carViewModel;

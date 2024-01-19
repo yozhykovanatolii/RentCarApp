@@ -1,20 +1,14 @@
 package com.example.myapplication.rentcarapp.viewmodel;
 
-import android.app.Application;
-import android.content.Context;
-import android.util.Log;
 
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
 import com.example.myapplication.rentcarapp.model.firestore.models.Client;
-import com.example.myapplication.rentcarapp.model.firestore.models.CreditCard;
 import com.example.myapplication.rentcarapp.model.firestore.models.DriverLicence;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
-import com.example.myapplication.rentcarapp.model.firestore.models.Station;
 import com.example.myapplication.rentcarapp.model.repository.CarRepository;
 
 
@@ -24,12 +18,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CarViewModel extends AndroidViewModel {
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
+public class CarViewModel extends ViewModel {
     private CarRepository carRepository;
 
-    public CarViewModel(Application application){
-        super(application);
-        carRepository = new CarRepository(application);
+    @Inject
+    public CarViewModel(CarRepository carRepository){
+        this.carRepository = carRepository;
     }
 
     public LiveData<Client> getClient(){
@@ -56,16 +55,8 @@ public class CarViewModel extends AndroidViewModel {
         return carRepository.getClientCreditCards();
     }
 
-    public LiveData<List<CreditCard>> getCreditCards(List<String> clientCards){
-        return carRepository.getCreditCards(clientCards);
-    }
-
     public LiveData<List<Rent>> getClientRents(){
         return carRepository.getClientRents();
-    }
-
-    public LiveData<List<String>> getBanks(){
-        return carRepository.getBanks();
     }
 
     public LiveData<String> getClientDriverLicence(){
@@ -93,10 +84,6 @@ public class CarViewModel extends AndroidViewModel {
     }
     public void updateFavoriteClientsCars(List<String> cars){
         carRepository.updateFavoriteClientsCars(cars);
-    }
-
-    public void createCreditCard(CreditCard creditCard){
-        carRepository.createCreditCard(creditCard);
     }
 
     public void createDriverLicence(DriverLicence driverLicence){

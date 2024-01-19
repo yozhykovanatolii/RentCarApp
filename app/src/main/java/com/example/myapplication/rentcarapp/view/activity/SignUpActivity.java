@@ -31,6 +31,9 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SignUpActivity extends AppCompatActivity {
     ShapeableImageView icon;
     Uri uri;

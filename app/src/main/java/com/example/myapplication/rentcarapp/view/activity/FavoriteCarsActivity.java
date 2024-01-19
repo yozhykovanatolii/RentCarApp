@@ -24,6 +24,9 @@ import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class FavoriteCarsActivity extends AppCompatActivity implements RecyclerViewInterface {
     RecyclerView favoriteCars;
     CarViewModel carViewModel;

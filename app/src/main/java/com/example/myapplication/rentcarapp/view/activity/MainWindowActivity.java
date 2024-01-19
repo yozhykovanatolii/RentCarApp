@@ -23,6 +23,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.Serializable;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainWindowActivity extends AppCompatActivity {
     BottomNavigationView navigationBottom;
     List<Car> cars;

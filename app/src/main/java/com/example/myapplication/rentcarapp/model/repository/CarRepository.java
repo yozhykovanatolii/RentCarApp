@@ -1,6 +1,5 @@
 package com.example.myapplication.rentcarapp.model.repository;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -14,44 +13,41 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import com.example.myapplication.rentcarapp.model.firestore.models.Bank;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
 import com.example.myapplication.rentcarapp.model.firestore.models.Client;
-import com.example.myapplication.rentcarapp.model.firestore.models.CreditCard;
 import com.example.myapplication.rentcarapp.model.firestore.models.DriverLicence;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
 import com.example.myapplication.rentcarapp.model.firestore.models.Station;
 import com.example.myapplication.rentcarapp.model.firestore.models.User;
 import com.example.myapplication.rentcarapp.service.CheckRentWorker;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 public class CarRepository {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private Context context;
 
-    public CarRepository(Context context){
-        firebaseAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+    @Inject
+    public CarRepository(FirebaseAuth firebaseAuth, FirebaseFirestore firestore, Context context) {
+        this.firebaseAuth = firebaseAuth;
+        this.firestore = firestore;
         this.context = context;
     }
 
@@ -114,20 +110,6 @@ public class CarRepository {
         });
         return cars;
     }
-
-    public LiveData<List<CreditCard>> getCreditCards(List<String> clientCards){
-        MutableLiveData<List<CreditCard>> creditCards = new MutableLiveData<>();
-        firestore.collection("creditCards").whereIn("numberCard", clientCards).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful() && !task.getResult().isEmpty()){
-                creditCards.setValue(task.getResult().toObjects(CreditCard.class));
-            }else{
-                creditCards.setValue(null);
-                Log.i("Errors", "Exception:", task.getException());
-            }
-        });
-        return creditCards;
-    }
-
 
     public LiveData<List<String>> getFavoriteClientsCars(){
         MutableLiveData<List<String>> favoritesCars = new MutableLiveData<>();
@@ -261,23 +243,6 @@ public class CarRepository {
         return producer;
     }
 
-    public LiveData<List<String>> getBanks(){
-        MutableLiveData<List<String>> banks = new MutableLiveData<>();
-        firestore.collection("banks").get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                List<String> names = new ArrayList<>();
-                for(QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
-                    names.add(queryDocumentSnapshot.toObject(Bank.class).getName());
-                }
-                banks.setValue(names);
-            }else{
-                banks.setValue(null);
-                Log.i("Errors", "Exception:", task.getException());
-            }
-        });
-        return banks;
-    }
-
     public LiveData<List<String>> getStations(){
         MutableLiveData<List<String>> stations = new MutableLiveData<>();
         firestore.collection("stations").get().addOnCompleteListener(task -> {
@@ -397,14 +362,6 @@ public class CarRepository {
 
     public void updateRentStatus(String idRent, String status){
         firestore.collection("rents").document(idRent).update("status", status).addOnSuccessListener(unused -> Log.i("Success", "Status updated")).addOnFailureListener(e -> Log.i("Error", "Update status exception: ", e));
-    }
-
-    public void createCreditCard(CreditCard creditCard){
-        firestore.collection("creditCards").document(creditCard.getNumberCard()).set(creditCard).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()){
-                Log.i("Errors", "Exception:", task.getException());
-            }
-        });
     }
 
     public void createDriverLicence(DriverLicence driverLicence){

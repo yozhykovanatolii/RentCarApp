@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class AddDriverLicenceActivity extends AppCompatActivity {
     HashMap<String, Integer> dataAboutCar;
     EditText driverLicenceNumber;
@@ -134,13 +137,6 @@ public class AddDriverLicenceActivity extends AppCompatActivity {
         intent.putExtra("DataAboutCar", dataAboutCar);
         startActivity(intent);
     }
-
-    private void goToAddCreditCardActivity(){
-        Intent addCreditCard = new Intent(AddDriverLicenceActivity.this, AddCreditCardActivity.class);
-        addCreditCard.putExtra("AddCreditCard", dataAboutCar);
-        startActivity(addCreditCard);
-    }
-
 
     public void pickDateIssuingDriverLicence(View view){
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, (datePicker, year, month, day) -> dateIssuingDriverLicence.setText(day + "." + (month + 1) + "." + year), 2023, 7, 24);
