@@ -141,7 +141,6 @@ public class AuthRepository {
         return userMutableLiveData;
     }
 
-
     public LiveData<Client> getClient(){
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         MutableLiveData<Client> clientMutableLiveData = new MutableLiveData<>();
@@ -203,7 +202,6 @@ public class AuthRepository {
             });
         }
     }
-
 
     public void updateUser(String oldUsername, String newUsername){
         firestore.collection("users").document(oldUsername).update("username", newUsername).addOnCompleteListener(task -> {

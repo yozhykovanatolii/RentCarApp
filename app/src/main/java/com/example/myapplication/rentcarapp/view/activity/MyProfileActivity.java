@@ -51,8 +51,8 @@ public class MyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_profile);
         initComponent();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        //initBroadcastReceiver();
         initClientsData();
+        initBroadcastReceiver();
         editUsername();
         editFullName();
         editPhone();
@@ -301,11 +301,6 @@ public class MyProfileActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Profile was updated", Toast.LENGTH_LONG).show();
     }
 
-    private void goToHomeFragment(){
-        Intent intent = new Intent(this, MainWindowActivity.class);
-        startActivity(intent);
-    }
-
     private void initClientsData(){
         authViewModel.getClient().observe(this, client -> {
             if(client != null){
@@ -332,7 +327,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);
     }
 
     @Override

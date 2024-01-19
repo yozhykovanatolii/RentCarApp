@@ -133,10 +133,6 @@ public class AuthViewModel extends ViewModel {
         authRepository.createClient(client);
     }
 
-    public void updateUser(String oldUsername, String newUsername){
-        authRepository.updateUser(oldUsername, newUsername);
-    }
-
     public void logOut(){
         authRepository.logOut();
     }
