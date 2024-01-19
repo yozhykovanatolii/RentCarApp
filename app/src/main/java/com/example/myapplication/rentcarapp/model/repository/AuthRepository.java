@@ -29,15 +29,18 @@ import com.google.firebase.storage.UploadTask;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 public class AuthRepository {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private FirebaseStorage firebaseStorage;
 
-    public AuthRepository(){
-        firebaseAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
+    @Inject
+    public AuthRepository(FirebaseAuth firebaseAuth, FirebaseFirestore firestore, FirebaseStorage firebaseStorage) {
+        this.firebaseAuth = firebaseAuth;
+        this.firestore = firestore;
+        this.firebaseStorage = firebaseStorage;
     }
 
     public LiveData<User> getUserByUsername(String username){

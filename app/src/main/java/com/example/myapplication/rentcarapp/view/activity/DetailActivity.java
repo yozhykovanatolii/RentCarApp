@@ -26,6 +26,9 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class DetailActivity extends AppCompatActivity {
     ImageView photo;
     TextView carModel, transmissionText, fuelText, engineVolumeText, fuelConsumptionText, childrenChairText, priceText;

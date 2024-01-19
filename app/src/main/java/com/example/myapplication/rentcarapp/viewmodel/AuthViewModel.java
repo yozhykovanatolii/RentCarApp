@@ -1,8 +1,5 @@
 package com.example.myapplication.rentcarapp.viewmodel;
 
-import android.hardware.usb.UsbRequest;
-import android.net.Uri;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -14,71 +11,64 @@ import com.example.myapplication.rentcarapp.model.firestore.models.User;
 import com.example.myapplication.rentcarapp.model.repository.AuthRepository;
 import com.google.firebase.auth.AuthCredential;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class AuthViewModel extends ViewModel {
-    private MutableLiveData<Boolean> checkEmailAndPassword = new MutableLiveData<>();
-    private MutableLiveData<Boolean> checkEmail = new MutableLiveData<>();
-    private MutableLiveData<Boolean> checkPassword = new MutableLiveData<>();
-    private MutableLiveData<Boolean> checkPhone = new MutableLiveData<>();
-    private MutableLiveData<Boolean> checkNewPassword = new MutableLiveData<>();
-    private MutableLiveData<Boolean> checkFullName = new MutableLiveData<>();
     private AuthRepository authRepository;
 
-    public AuthViewModel(){
-        authRepository = new AuthRepository();
+    @Inject
+    public AuthViewModel(AuthRepository authRepository){
+        this.authRepository = authRepository;
     }
-
 
     public LiveData<Boolean> isEmailAndPasswordWriteCorrect(String email, String newPassword){
         if(isEmailWriteCorrect(email) && isPasswordLargeThanOrEqualEight(newPassword)){
-            checkEmailAndPassword.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            checkEmailAndPassword.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return checkEmailAndPassword;
     }
 
     public LiveData<Boolean> isFullNameWriteCorrect(String fullName){
         if(preventFullName(fullName)){
-            checkFullName.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            checkFullName.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return checkFullName;
     }
 
     public LiveData<Boolean> isEmailCorrect(String email){
         if(isEmailWriteCorrect(email)){
-            checkEmail.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            checkEmail.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return checkEmail;
     }
 
     public LiveData<Boolean> isPasswordWriteCorrect(String password){
         if(isPasswordLargeThanOrEqualEight(password)){
-            checkPassword.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            checkPassword.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return checkPassword;
     }
 
     public LiveData<Boolean> isUserPhoneCorrect(String phone){
         if(isPhoneWriteCorrect(phone)){
-            checkPhone.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            checkPhone.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return checkPhone;
     }
     public LiveData<Boolean> isNewPasswordEqualConfirmedPassword(String newPassword, String confirmNewPassword){
         if(isNewPasswordEqualConfirmNewPassword(newPassword, confirmNewPassword)){
-            checkNewPassword.setValue(true);
+            return new MutableLiveData<>(true);
         }else{
-            checkNewPassword.setValue(false);
+            return new MutableLiveData<>(false);
         }
-        return checkNewPassword;
     }
 
     public LiveData<String> getClientsUserName(){

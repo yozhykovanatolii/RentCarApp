@@ -26,6 +26,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class RentDetailActivity extends AppCompatActivity {
     Rent rent;
     MaterialButton returnCar, cancelRent;

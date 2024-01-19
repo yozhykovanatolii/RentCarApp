@@ -12,6 +12,9 @@ import android.view.View;
 import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SuccessfulActivity extends AppCompatActivity {
     BroadcastReceiver broadcastReceiver;
 

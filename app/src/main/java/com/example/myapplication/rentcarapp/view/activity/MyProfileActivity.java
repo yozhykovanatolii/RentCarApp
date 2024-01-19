@@ -32,6 +32,9 @@ import com.squareup.picasso.Picasso;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MyProfileActivity extends AppCompatActivity {
     AuthViewModel authViewModel;
     TextInputEditText accountFullName, accountPhone, accountUsername, accountEmail, accountUserPassword;

@@ -16,7 +16,9 @@ import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class PaymentMethodActivity extends AppCompatActivity implements PaymentResultListener {
     Checkout checkout;
     BroadcastReceiver broadcastReceiver;

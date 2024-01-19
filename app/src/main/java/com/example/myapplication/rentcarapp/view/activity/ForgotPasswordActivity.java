@@ -22,6 +22,9 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ForgotPasswordActivity extends AppCompatActivity {
     TextInputEditText emailText;
     TextView incorrect_email;

@@ -32,6 +32,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Objects;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
     AuthViewModel authViewModel;
     TextInputEditText signInUsername, signInPassword;

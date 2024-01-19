@@ -1,19 +1,18 @@
 package com.example.myapplication.rentcarapp.view.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 
 import com.example.myapplication.rentcarapp.R;
-import com.example.myapplication.rentcarapp.model.firestore.models.Client;
 import com.example.myapplication.rentcarapp.viewmodel.AuthViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SplashScreenActivity extends AppCompatActivity {
     AuthViewModel authViewModel;
 

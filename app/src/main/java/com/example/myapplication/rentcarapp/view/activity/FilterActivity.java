@@ -21,6 +21,9 @@ import com.google.android.material.slider.RangeSlider;
 import java.io.Serializable;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class FilterActivity extends AppCompatActivity {
     RangeSlider priceSlider;
     RadioButton checkChilderChair, checkAutomaton, checkMechanic, checkGasoline, checkDiesel;
