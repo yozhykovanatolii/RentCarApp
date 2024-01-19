@@ -44,7 +44,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         car = (Car) getIntent().getSerializableExtra("Car");
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        //initBroadcastReceiver();
+        initBroadcastReceiver();
         initComponents();
         initData();
         checkCarByRent();

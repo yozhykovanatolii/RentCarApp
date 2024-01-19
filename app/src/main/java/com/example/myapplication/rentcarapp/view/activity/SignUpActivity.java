@@ -40,7 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
     AuthViewModel authViewModel;
     TextInputEditText newUsername, newFullName, newEmail, userPassword, newPhone;
     TextView incorrectFullName, incorrectEmail, incorrectPassword, incorrectPhone, existUsername, choosePhoto;
-    //BroadcastReceiver broadcastReceiver;
+    BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +76,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void initBroadcastReceiver(){
-        //broadcastReceiver = new InternetReceiver();
-        //registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        broadcastReceiver = new InternetReceiver();
+        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     public void pickUpImage(View view){
@@ -300,6 +300,6 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);
     }
 }

@@ -42,6 +42,7 @@ public class MyProfileActivity extends AppCompatActivity {
     ShapeableImageView updateAvatar;
     Client clientCurrent;
     User userCurrent;
+    String urlPhoto = "";
     BroadcastReceiver broadcastReceiver;
 
     @Override
@@ -50,8 +51,8 @@ public class MyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_profile);
         initComponent();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        //initBroadcastReceiver();
         initClientsData();
+        initBroadcastReceiver();
         editUsername();
         editFullName();
         editPhone();
@@ -270,25 +271,33 @@ public class MyProfileActivity extends AppCompatActivity {
         String phone = Objects.requireNonNull(accountPhone.getText()).toString();
         String newPassword = Objects.requireNonNull(accountUserPassword.getText()).toString();
         String email = clientCurrent.getEmail();
+        String password = userCurrent.getPassword();
         if(checkFullName(fullName) && checkPhoneNumber(phone) && checkEmail(newEmail) && checkPassword(newPassword)){
+            authViewModel.updateEmailAndPasswordInFirebase(newEmail, newPassword, email, password);
             clientCurrent.setEmail(newEmail);
             clientCurrent.setFullName(fullName);
             clientCurrent.setPhoneNumber(phone);
-            //authViewModel.saveImageInCloudStorage(clientCurrent);
             hideErrorMessage();
-            updateUser(email, newEmail, newPassword, username);
+            updatePhoto(newPassword, username);
         }else{
             showErrorMessage();
         }
-
     }
 
-    private void updateUser(String email, String newEmail, String newPassword, String username){
-        String password = userCurrent.getPassword();
+    private void updatePhoto(String newPassword, String username){
+        if(!urlPhoto.isEmpty()){
+            clientCurrent.setPhoto(urlPhoto);
+            authViewModel.saveImageInCloudStorage(clientCurrent);
+        }else{
+            authViewModel.updateClient(clientCurrent);
+        }
+        updateUser(newPassword, username);
+    }
+
+    private void updateUser(String newPassword, String username){
         userCurrent.setUsername(username);
         userCurrent.setPassword(newPassword);
         authViewModel.updateUser(userCurrent);
-        authViewModel.updateEmailAndPasswordInFirebase(newEmail, newPassword, email, password);
         Toast.makeText(getApplicationContext(), "Profile was updated", Toast.LENGTH_LONG).show();
     }
 
@@ -318,7 +327,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -327,7 +336,7 @@ public class MyProfileActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK){
             if(requestCode == 1000){
                 if(data != null){
-                    clientCurrent.setPhoto(Objects.requireNonNull(data.getData()).toString());
+                    urlPhoto = Objects.requireNonNull(data.getData()).toString();
                     updateAvatar.setImageURI(data.getData());
                     updateAvatar.setRotation(0);
                 }
