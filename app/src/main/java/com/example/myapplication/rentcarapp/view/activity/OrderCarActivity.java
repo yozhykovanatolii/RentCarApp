@@ -106,6 +106,7 @@ public class OrderCarActivity extends AppCompatActivity {
 
     private void goToPaymentMethodActivity(){
         Intent intent = new Intent(this, PaymentMethodActivity.class);
+        intent.putExtra("Amount", totalSum);
         startActivity(intent);
     }
 

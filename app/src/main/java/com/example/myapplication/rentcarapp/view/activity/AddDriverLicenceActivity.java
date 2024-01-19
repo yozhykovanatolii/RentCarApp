@@ -120,21 +120,8 @@ public class AddDriverLicenceActivity extends AppCompatActivity {
 
     private void checkClientCreditCard(String driverLicenceNum, String dateIssuing, String dateValid){
         DriverLicence driverLicence = new DriverLicence(driverLicenceNum, dateIssuing, dateValid);
-        carViewModel.getClientCreditCards().observe(this, strings -> {
-            if(strings != null){
-                createDriverLicenceAndUpdateClientDriverLicence(driverLicence, driverLicenceNum);
-                goToOrderActivity();
-            }else{
-                createDriverLicenceAndUpdateClientDriverLicence(driverLicence, driverLicenceNum);
-                goToAddCreditCardActivity();
-            }
-        });
-    }
-
-    private void printClientsCreditCard(List<String> creditCards){
-        for(String creditCard: creditCards){
-            Log.i("CreditCardsClient", creditCard);
-        }
+        createDriverLicenceAndUpdateClientDriverLicence(driverLicence, driverLicenceNum);
+        goToOrderActivity();
     }
 
     private void createDriverLicenceAndUpdateClientDriverLicence(DriverLicence driverLicence, String driverLicenceNum){
