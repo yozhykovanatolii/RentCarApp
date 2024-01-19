@@ -121,8 +121,8 @@ public class AuthViewModel extends ViewModel {
         authRepository.signUpWithEmailAndPassword(client,newUser, password);
     }
 
-    public void signInByEmailAndPassword(String email, String password){
-        authRepository.signInByEmailAndPassword(email, password);
+    public LiveData<String> signInByEmailAndPassword(String email, String password){
+        return authRepository.signInByEmailAndPassword(email, password);
     }
 
     public void authenticationByGoogle(AuthCredential credential){

@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,9 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private void editUsername(){
         signInUsername.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -77,18 +76,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
     }
 
     private void editPassword(){
         signInPassword.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -96,9 +91,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
     }
 
@@ -174,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
     private void getClientEmail(User user){
         authViewModel.getClientEmailByToken(user.getToken()).observe(this, s -> {
             if(s != null){
+                Log.i("Email", s);
                 authorization(s);
             }else{
                 Toast.makeText(getApplicationContext(), "Something was happened. Error", Toast.LENGTH_LONG).show();
@@ -183,9 +177,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void authorization(String email){
         String password = Objects.requireNonNull(signInPassword.getText()).toString();
-        authViewModel.signInByEmailAndPassword(email, password);
-        Intent intent = new Intent(this, MainWindowActivity.class);
-        startActivity(intent);
+        authViewModel.signInByEmailAndPassword(email, password).observe(this, token -> {
+            if(token != null){
+                Intent intent = new Intent(MainActivity.this, MainWindowActivity.class);
+                startActivity(intent);
+            }else{
+                Toast.makeText(getApplicationContext(), "Something was happened. Error", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

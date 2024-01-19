@@ -51,10 +51,6 @@ public class CarViewModel extends ViewModel {
         return carRepository.getFavoriteClientsCars();
     }
 
-    public LiveData<List<String>> getClientCreditCards(){
-        return carRepository.getClientCreditCards();
-    }
-
     public LiveData<List<Rent>> getClientRents(){
         return carRepository.getClientRents();
     }
@@ -73,10 +69,6 @@ public class CarViewModel extends ViewModel {
 
     public LiveData<List<String>> getStations(){
         return carRepository.getStations();
-    }
-
-    public void updateCreditCardClient(List<String> cards, String token){
-        carRepository.updateCreditCardClient(cards, token);
     }
 
     public void updateDriverLicenceClient(String driverLicence){
@@ -124,30 +116,6 @@ public class CarViewModel extends ViewModel {
 
     public LiveData<Boolean> isDriverLicenceNumberWriteCorrect(String driverLicenceNumber){
         if(isDriverLicenceNumberCorrect(driverLicenceNumber)){
-            return new MutableLiveData<>(true);
-        }else{
-            return new MutableLiveData<>(false);
-        }
-    }
-
-    public LiveData<Boolean> isCreditCardNumberWriteCorrect(String creditCard){
-        if(isCreditCardNumberLengthEqualNineteen(creditCard)){
-            return new MutableLiveData<>(true);
-        }else{
-            return new MutableLiveData<>(false);
-        }
-    }
-
-    public LiveData<Boolean> isSpecialCodeWriteCorrect(String specialCode){
-        if(isSpecialCodeLengthEqualThree(specialCode)){
-            return new MutableLiveData<>(true);
-        }else{
-            return new MutableLiveData<>(false);
-        }
-    }
-
-    public LiveData<Boolean> isDateOfCardWriteCorrect(String cardDate){
-        if(isDateOfCardLengthEqualFive(cardDate)){
             return new MutableLiveData<>(true);
         }else{
             return new MutableLiveData<>(false);
@@ -238,18 +206,6 @@ public class CarViewModel extends ViewModel {
 
     private boolean isDriverLicenceNumberCorrect(String driverLicenceNumber){
         return driverLicenceNumber.length() == 9;
-    }
-
-    private boolean isCreditCardNumberLengthEqualNineteen(String creditCard){
-        return creditCard.length() == 19 && creditCard.contains(" ");
-    }
-
-    private boolean isSpecialCodeLengthEqualThree(String specialCode){
-        return specialCode.length() == 3;
-    }
-
-    private boolean isDateOfCardLengthEqualFive(String cardDate){
-        return cardDate.length() == 5 && cardDate.contains("/") && !cardDate.startsWith("/") && !cardDate.endsWith("/");
     }
 
 }

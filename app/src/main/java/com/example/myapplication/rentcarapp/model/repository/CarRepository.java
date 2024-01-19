@@ -209,24 +209,6 @@ public class CarRepository {
         return driverLicence;
     }
 
-    public LiveData<List<String>> getClientCreditCards(){
-        MutableLiveData<List<String>> creditsCards = new MutableLiveData<>();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if(firebaseUser != null){
-            String token = firebaseUser.getUid();
-            firestore.collection("clients").document(token).get().addOnCompleteListener(task -> {
-                if(task.isSuccessful() && !task.getResult().toObject(Client.class).getCards().isEmpty()){
-                    Log.i("Success", "Credit cards exist");
-                    creditsCards.setValue(Objects.requireNonNull(task.getResult().toObject(Client.class)).getCards());
-                }else{
-                    creditsCards.setValue(null);
-                    Log.i("Errors", "Exception:", task.getException());
-                }
-            });
-        }
-        return creditsCards;
-    }
-
     public LiveData<String> getProducerByModel(String model){
         MutableLiveData<String> producer = new MutableLiveData<>();
         firestore.collection("models").document(model).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -293,6 +275,8 @@ public class CarRepository {
                     Log.i("Errors", "Exception", task.getException());
                 }
             });
+        }else{
+            Log.i("Error", "You are not authorization");
         }
         return userName;
     }

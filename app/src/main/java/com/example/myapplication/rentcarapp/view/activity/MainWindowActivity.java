@@ -8,7 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
@@ -17,6 +19,7 @@ import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
 import com.example.myapplication.rentcarapp.view.fragment.AccountFragment;
 import com.example.myapplication.rentcarapp.view.fragment.HomeFragment;
 import com.example.myapplication.rentcarapp.view.fragment.RentFragment;
+import com.example.myapplication.rentcarapp.viewmodel.AuthViewModel;
 import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -29,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MainWindowActivity extends AppCompatActivity {
     BottomNavigationView navigationBottom;
     List<Car> cars;
+
     CarViewModel carViewModel;
     //BroadcastReceiver broadcastReceiver;
 
@@ -70,6 +74,7 @@ public class MainWindowActivity extends AppCompatActivity {
     public List<Car> getCars() {
         return cars;
     }
+
 
     private boolean onItemClicked(MenuItem item){
         if(item.getItemId() == R.id.home){

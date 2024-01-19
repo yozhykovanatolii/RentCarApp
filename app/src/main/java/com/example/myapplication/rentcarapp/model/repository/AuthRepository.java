@@ -247,12 +247,18 @@ public class AuthRepository {
         });
     }
 
-    public void signInByEmailAndPassword(String email, String password){
+    public LiveData<String> signInByEmailAndPassword(String email, String password){
+        MutableLiveData<String> userToken = new MutableLiveData<>();
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(!task.isSuccessful()){
+                userToken.setValue(null);
                 Log.i("Errors", "Exception:", task.getException());
+            }else{
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                userToken.setValue(firebaseUser.getUid());
             }
         });
+        return userToken;
     }
 
     public void createUser(User user){
