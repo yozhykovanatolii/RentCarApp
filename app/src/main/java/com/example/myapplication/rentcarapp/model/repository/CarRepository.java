@@ -356,14 +356,6 @@ public class CarRepository {
         });
     }
 
-    public void updateCreditCardClient(List<String> cards, String token){
-        firestore.collection("clients").document(token).update("cards", cards).addOnCompleteListener(task -> {
-            if(!task.isSuccessful()){
-                Log.i("Errors", "Exception:", task.getException());
-            }
-        });
-    }
-
     public void updateDriverLicenceClient(String driverLicence){
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user != null){

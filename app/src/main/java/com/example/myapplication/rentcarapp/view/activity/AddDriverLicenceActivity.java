@@ -114,22 +114,17 @@ public class AddDriverLicenceActivity extends AppCompatActivity {
         String dateValid = dateValidUntilDriverLicence.getText().toString();
         if(checkDriverLicenceID(driverLicence).get() && !checkDate(dateIssuing, dateValid)){
             hideErrorMessage();
-            checkClientCreditCard(driverLicence, dateIssuing, dateValid);
+            createDriverLicenceAndUpdateClientDriverLicence(driverLicence, dateIssuing, dateValid);
         }else{
             showErrorMessage();
         }
     }
 
-
-    private void checkClientCreditCard(String driverLicenceNum, String dateIssuing, String dateValid){
+    private void createDriverLicenceAndUpdateClientDriverLicence(String driverLicenceNum, String dateIssuing, String dateValid){
         DriverLicence driverLicence = new DriverLicence(driverLicenceNum, dateIssuing, dateValid);
-        createDriverLicenceAndUpdateClientDriverLicence(driverLicence, driverLicenceNum);
-        goToOrderActivity();
-    }
-
-    private void createDriverLicenceAndUpdateClientDriverLicence(DriverLicence driverLicence, String driverLicenceNum){
         carViewModel.createDriverLicence(driverLicence);
         carViewModel.updateDriverLicenceClient(driverLicenceNum);
+        goToOrderActivity();
     }
 
     private void goToOrderActivity(){
