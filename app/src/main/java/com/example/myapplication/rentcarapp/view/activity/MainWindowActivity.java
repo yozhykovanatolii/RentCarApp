@@ -45,8 +45,13 @@ public class MainWindowActivity extends AppCompatActivity {
         navigationBottom.setOnItemSelectedListener(this::onItemClicked);
         cars = (List<Car>) getIntent().getSerializableExtra("FilterCar");
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
         getRegistrationToken();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initBroadcastReceiver(){

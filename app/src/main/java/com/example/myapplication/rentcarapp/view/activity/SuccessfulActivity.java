@@ -22,6 +22,11 @@ public class SuccessfulActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_successful);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initBroadcastReceiver();
     }
 

@@ -44,8 +44,13 @@ public class AddDriverLicenceActivity extends AppCompatActivity {
         initComponents();
         dataAboutCar = (HashMap<String, Integer>) getIntent().getSerializableExtra("AddDriverLicence");
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
         editDriverLicenceID();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initComponents(){

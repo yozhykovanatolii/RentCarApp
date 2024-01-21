@@ -54,11 +54,16 @@ public class OrderCarActivity extends AppCompatActivity {
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
         dataAboutCar = (HashMap<String, Integer>) getIntent().getSerializableExtra("DataAboutCar");
         current = new Date();
-        initBroadcastReceiver();
         initComponents();
         initData();
         giveDataFromHashMap();
         changeTextView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initBroadcastReceiver(){

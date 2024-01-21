@@ -21,7 +21,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-
     }
 
     @Override

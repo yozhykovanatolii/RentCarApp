@@ -44,13 +44,18 @@ public class RentDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rent_detail);
         rent = (Rent) getIntent().getSerializableExtra("Rent");
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
         initOther();
         initStation();
         initDate();
         initPrice();
         checkDateToReturnCar();
         checkDateToIssuingCar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initBroadcastReceiver(){

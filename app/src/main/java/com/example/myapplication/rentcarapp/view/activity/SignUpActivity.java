@@ -48,13 +48,17 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         initComponents();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-
-        //initBroadcastReceiver();
         editUsername();
         editFullName();
         editEmail();
         editPassword();
         editPhoneNumber();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initComponents(){
@@ -301,6 +305,6 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);
     }
 }

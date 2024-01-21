@@ -43,9 +43,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
         user = (User) getIntent().getSerializableExtra("User");
         email = getIntent().getStringExtra("Email");
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        initBroadcastReceiver();
         editNewPassword();
         editConfirmedPassword();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initBroadcastReceiver(){
