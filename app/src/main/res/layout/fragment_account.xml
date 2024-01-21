@@ -9,12 +9,11 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userAvatar"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
         android:rotation="90"
-        android:src="@drawable/image"
         app:layout_constraintEnd_toStartOf="@id/guideline18"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/guideline"
@@ -187,5 +186,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="187dp" />
+        app:layout_constraintGuide_begin="215dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
