@@ -44,11 +44,16 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         car = (Car) getIntent().getSerializableExtra("Car");
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
         initComponents();
         initData();
         checkCarByRent();
         checkIsFavorite();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initComponents(){

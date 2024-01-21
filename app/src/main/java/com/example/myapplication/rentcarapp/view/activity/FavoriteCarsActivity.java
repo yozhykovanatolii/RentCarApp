@@ -41,8 +41,13 @@ public class FavoriteCarsActivity extends AppCompatActivity implements RecyclerV
         setContentView(R.layout.activity_favorite_cars);
         favoriteCars = findViewById(R.id.favoriteCars);
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
         initData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initBroadcastReceiver(){

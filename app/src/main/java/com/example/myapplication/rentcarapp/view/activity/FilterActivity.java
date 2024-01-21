@@ -36,8 +36,13 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
         priceSlider = findViewById(R.id.priceSlider);
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initBroadcastReceiver();
         initCheckBox();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initBroadcastReceiver(){

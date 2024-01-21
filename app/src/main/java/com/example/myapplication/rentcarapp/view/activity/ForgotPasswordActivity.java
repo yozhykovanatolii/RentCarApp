@@ -38,8 +38,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         emailText = findViewById(R.id.emailText);
         incorrect_email = findViewById(R.id.errorEmail);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        initBroadcastReceiver();
         editEmail();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initBroadcastReceiver(){

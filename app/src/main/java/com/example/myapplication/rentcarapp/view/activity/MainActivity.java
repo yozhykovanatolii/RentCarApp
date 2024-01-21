@@ -48,9 +48,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initComponents();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        //initBroadcastReceiver();
         editUsername();
         editPassword();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initComponents(){
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         incorrect_username = findViewById(R.id.errorUsername);
         incorrect_password = findViewById(R.id.errorPassword);
     }
+
 
     private void initBroadcastReceiver(){
         broadcastReceiver = new InternetReceiver();
@@ -190,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);
     }
 
     @Override

@@ -52,12 +52,17 @@ public class MyProfileActivity extends AppCompatActivity {
         initComponent();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         initClientsData();
-        initBroadcastReceiver();
         editUsername();
         editFullName();
         editPhone();
         editEmail();
         editPassword();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
     }
 
     private void initComponent(){

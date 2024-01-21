@@ -36,6 +36,12 @@ public class PaymentMethodActivity extends AppCompatActivity implements PaymentR
         startPayment();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBroadcastReceiver();
+    }
+
     private void initBroadcastReceiver(){
         broadcastReceiver = new InternetReceiver();
         registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
