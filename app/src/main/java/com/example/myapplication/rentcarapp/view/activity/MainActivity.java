@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initComponents();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        initBroadcastReceiver();
+        //initBroadcastReceiver();
         editUsername();
         editPassword();
     }
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        //unregisterReceiver(broadcastReceiver);
     }
 
     @Override

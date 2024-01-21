@@ -165,7 +165,7 @@ public class AuthRepository {
     }
 
     public void updateUsersPassword(User user, String email, String newPassword){
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         AuthCredential credential = EmailAuthProvider.getCredential(email, user.getPassword());
         if(firebaseUser != null){
             firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
@@ -173,7 +173,7 @@ public class AuthRepository {
                     firebaseUser.updatePassword(newPassword);
                     updatePasswordInFirestore(user.getToken(), newPassword);
                 }else{
-                    Log.i("Errors", "Exception:", task.getException());
+                    Log.i("HI", "Exception:", task.getException());
                 }
             });
         }
@@ -182,7 +182,7 @@ public class AuthRepository {
     public void updatePasswordInFirestore(String token, String newPassword){
         firestore.collection("users").document(token).update("password", newPassword).addOnCompleteListener(task -> {
             if(!task.isSuccessful()){
-                Log.i("Errors", "Exception:", task.getException());
+                Log.i("Error", "Exception:", task.getException());
             }
         });
     }
@@ -197,7 +197,7 @@ public class AuthRepository {
                     firebaseUser.updateEmail(newEmail);
                     firebaseUser.updatePassword(newPassword);
                 }else{
-                    Log.i("Errors", "Exception:", task.getException());
+                    Log.i("Error", "Exception:", task.getException());
                 }
             });
         }
