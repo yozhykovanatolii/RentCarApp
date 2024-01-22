@@ -14,7 +14,6 @@
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
         android:rotation="90"
-        android:src="@drawable/avatar"
         app:layout_constraintEnd_toStartOf="@id/guideline26"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/guideline25"
@@ -35,13 +34,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="15dp"
         android:text="@string/welcome"
         android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/homeAvatar"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintStart_toEndOf="@id/homeAvatar"
-        app:layout_constraintTop_toTopOf="@id/homeAvatar" />
+        app:layout_constraintTop_toBottomOf="@id/guideline27" />
 
     <TextView
         android:id="@+id/homeUsername"
@@ -52,7 +49,8 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/homeAvatar"
-        app:layout_constraintTop_toBottomOf="@id/welcomeHome" />
+        app:layout_constraintTop_toBottomOf="@id/welcomeHome"
+        app:layout_constraintBottom_toBottomOf="@id/homeAvatar"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -76,12 +74,13 @@
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/background_searchview"
         app:layout_constraintEnd_toStartOf="@id/floatingActionButton"
         app:layout_constraintStart_toEndOf="@id/guideline25"
-        app:layout_constraintTop_toBottomOf="@id/guideline28" />
+        app:layout_constraintBottom_toBottomOf="@id/floatingActionButton"
+        app:layout_constraintTop_toTopOf="@id/floatingActionButton" />
 
 
     <androidx.constraintlayout.widget.Guideline

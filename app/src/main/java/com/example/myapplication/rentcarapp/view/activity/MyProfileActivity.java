@@ -52,7 +52,6 @@ public class MyProfileActivity extends AppCompatActivity {
         initComponent();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         initClientsData();
-        editUsername();
         editFullName();
         editPhone();
         editEmail();
@@ -100,22 +99,6 @@ public class MyProfileActivity extends AppCompatActivity {
         errorPhone.setVisibility(View.GONE);
         errorEmail.setVisibility(View.GONE);
         errorPassword.setVisibility(View.GONE);
-    }
-
-    private void editUsername(){
-        accountUsername.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String username = Objects.requireNonNull(accountUsername.getText()).toString();
-                checkUsername(username);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
     }
 
     private void editFullName(){
@@ -255,14 +238,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
     public void updateProfile(View view){
         String username = Objects.requireNonNull(accountUsername.getText()).toString();
-        authViewModel.getUserByUsername(username).observe(this, user -> {
-            if(user == null){
-                errorUsername.setVisibility(View.GONE);
-                updateClient(username);
-            }else{
-                errorUsername.setVisibility(View.VISIBLE);
-            }
-        });
+        updateClient(username);
     }
 
     public void changePhoto(View view){

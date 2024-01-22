@@ -147,6 +147,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:0.5"
             android:background="@drawable/background_payment_details"
             app:layout_constraintBottom_toTopOf="@id/guideline45"
             app:layout_constraintEnd_toStartOf="@id/guideline40"
