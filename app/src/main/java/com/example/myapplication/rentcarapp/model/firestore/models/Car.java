@@ -9,7 +9,7 @@ public class Car implements Serializable {
     private String typeOfFuel;
     private int price;
     private String photo;
-    private boolean childrenChair;
+    private String childrenChair;
     private double fuel;
     private String engineVolume;
 
@@ -63,13 +63,9 @@ public class Car implements Serializable {
         this.photo = photo;
     }
 
-    public boolean isChildrenChair() {
-        return childrenChair;
-    }
+    public String getChildrenChair() {return childrenChair;}
 
-    public void setChildrenChair(boolean childrenChair) {
-        this.childrenChair = childrenChair;
-    }
+    public void setChildrenChair(String childrenChair) {this.childrenChair = childrenChair;}
 
     public double getFuel() {
         return fuel;

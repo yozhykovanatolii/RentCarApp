@@ -49,8 +49,6 @@
         app:layout_constraintStart_toEndOf="@id/userAvatar"
         app:layout_constraintTop_toBottomOf="@id/welcomeLabel" />
 
-
-
     <androidx.cardview.widget.CardView
         android:id="@+id/myProfile"
         android:layout_width="0dp"

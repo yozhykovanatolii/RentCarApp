@@ -24,6 +24,8 @@
         android:background="@color/black"
         app:itemIconTint="@color/icon_tinit_selector"
         app:itemTextColor="@color/icon_tinit_selector"
+        app:itemActiveIndicatorStyle="@android:color/transparent"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

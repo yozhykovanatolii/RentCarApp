@@ -39,7 +39,7 @@
     <string name="price">Price</string>
     <string name="from">From</string>
     <string name="to">To</string>
-    <string name="automaton">Automaton</string>
+    <string name="automatic">Automatic</string>
     <string name="mechanic">Mechanic</string>
     <string name="gasoline">Gasoline</string>
     <string name="diesel">Diesel</string>
