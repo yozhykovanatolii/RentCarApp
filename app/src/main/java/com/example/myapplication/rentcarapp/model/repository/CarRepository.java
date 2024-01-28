@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
@@ -87,7 +88,7 @@ public class CarRepository {
 
     public LiveData<List<Car>> getCarByModel(String model){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
-        firestore.collection("cars").whereEqualTo("model", model).get().addOnCompleteListener(task -> {
+        firestore.collection("cars").whereGreaterThanOrEqualTo("model", model).whereLessThanOrEqualTo("model", model + '\uf8ff').get().addOnCompleteListener(task -> {
             if(task.isSuccessful() && !task.getResult().isEmpty()){
                 cars.setValue(task.getResult().toObjects(Car.class));
             }else{

@@ -100,15 +100,12 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private void searchCar(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                getCarByModel(query);
-                Log.i("Item", "");
-                return true;
-            }
+            public boolean onQueryTextSubmit(String query) {return false;}
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                getCarByModel(newText);
+                return true;
             }
         });
     }
@@ -118,8 +115,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             if(cars != null){
                 initRecyclerView(cars);
             }else{
-                initData();
                 Toast.makeText(getContext(), "Sorry, but there is no such car.", Toast.LENGTH_LONG).show();
+                initData();
             }
         });
     }
