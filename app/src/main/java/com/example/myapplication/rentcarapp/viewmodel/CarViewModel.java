@@ -140,7 +140,7 @@ public class CarViewModel extends ViewModel {
         return new MutableLiveData<>(null);
     }
 
-    public LiveData<List<Car>> confirmChoice(boolean childrenChair, String transmission, String typeOfFuel, int minPrice, int maxPrice){
+    public LiveData<List<Car>> confirmChoice(String childrenChair, String transmission, String typeOfFuel, int minPrice, int maxPrice){
         if(isTransmissionEqualNull(transmission, typeOfFuel)){
             return carRepository.getCarsWithoutTransmission(minPrice, maxPrice, childrenChair, typeOfFuel);
         }if(isTypeOfFuelEqualNull(transmission, typeOfFuel)){

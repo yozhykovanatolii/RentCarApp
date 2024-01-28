@@ -2,6 +2,7 @@ package com.example.myapplication.rentcarapp.view.activity;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.BroadcastReceiver;
@@ -26,9 +27,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class FilterActivity extends AppCompatActivity {
     RangeSlider priceSlider;
-    RadioButton checkChilderChair, checkAutomaton, checkMechanic, checkGasoline, checkDiesel;
+    CardView checkAuto, checkMechanic, checkGasoline, checkElectric, existChildrenChair;
     CarViewModel carViewModel;
     BroadcastReceiver broadcastReceiver;
+    String transmission, typeOfFuel;
+    String isChairExist = "Not Exist";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
         priceSlider = findViewById(R.id.priceSlider);
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-        initCheckBox();
+        initComponents();
     }
 
     @Override
@@ -50,35 +53,27 @@ public class FilterActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
-    private void initCheckBox(){
-        checkChilderChair = findViewById(R.id.checkChilderChair);
-        checkAutomaton = findViewById(R.id.checkAutomaton);
+    private void initComponents(){
+        existChildrenChair = findViewById(R.id.existChildrenChair);
+        existChildrenChair.setOnClickListener(this::clickExistChildrenChair);
+        checkAuto = findViewById(R.id.checkAuto);
+        checkAuto.setOnClickListener(this::clickTransmissionCards);
         checkMechanic = findViewById(R.id.checkMechanic);
+        checkMechanic.setOnClickListener(this::clickTransmissionCards);
         checkGasoline = findViewById(R.id.checkGasoline);
-        checkDiesel = findViewById(R.id.checkDiesel);
+        checkGasoline.setOnClickListener(this::clickTypeOfFuel);
+        checkElectric = findViewById(R.id.checkElectric);
+        checkElectric.setOnClickListener(this::clickTypeOfFuel);
     }
 
     public void apply(View view){
-        getCheckTransmission();
-    }
-
-    private void getCheckTransmission(){
-        carViewModel.choiceTransmission(checkAutomaton.isChecked(), checkMechanic.isChecked()).observe(this, this::getCheckTypeOfFuel);
-    }
-
-    private void getCheckTypeOfFuel(String transmission){
-        carViewModel.choiceTypeOfFuel(checkGasoline.isChecked(), checkDiesel.isChecked()).observe(this, s -> confirmChoice(transmission, s));
-    }
-
-    private void confirmChoice(String transmission, String typeOfFuel){
-        boolean childrenChair = checkChilderChair.isChecked();
         List<Float> values = priceSlider.getValues();
         float minPrice = values.get(0);
         float maxPrice = values.get(1);
-        getCarsByFilter(childrenChair, transmission, typeOfFuel, (int) minPrice, (int) maxPrice);
+        getCarsByFilter(isChairExist, transmission, typeOfFuel, (int) minPrice, (int) maxPrice);
     }
 
-    private void getCarsByFilter(boolean childrenChair, String transmission, String typeOfFuel, int minPrice, int maxPrice){
+    private void getCarsByFilter(String childrenChair, String transmission, String typeOfFuel, int minPrice, int maxPrice){
         carViewModel.confirmChoice(childrenChair, transmission, typeOfFuel, minPrice, maxPrice).observe(this, this::sendChoicesClient);
     }
 
@@ -86,6 +81,30 @@ public class FilterActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainWindowActivity.class);
         intent.putExtra("FilterCar", (Serializable) cars);
         startActivity(intent);
+    }
+
+    public void clickTransmissionCards(View view){
+        if(view.getId() == R.id.checkAuto){
+            transmission = "Automaton";
+            checkAuto.setCardBackgroundColor(getResources().getColor(R.color.blue));
+        }if(view.getId() == R.id.checkMechanic){
+            transmission = "Mechanic";
+            checkMechanic.setCardBackgroundColor(getResources().getColor(R.color.blue));
+        }
+    }
+
+    public void clickTypeOfFuel(View view){
+        if(view.getId() == R.id.checkElectric){
+            typeOfFuel = "Electric";
+        }if(view.getId() == R.id.checkGasoline){
+            typeOfFuel = "Gasoline";
+        }
+    }
+
+    public void clickExistChildrenChair(View view){
+        if(view.getId() == R.id.existChildrenChair){
+            isChairExist = "Exist";
+        }
     }
 
     @Override

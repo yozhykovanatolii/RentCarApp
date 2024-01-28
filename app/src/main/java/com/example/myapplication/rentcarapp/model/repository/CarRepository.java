@@ -141,7 +141,7 @@ public class CarRepository {
         }
     }
 
-    public LiveData<List<Car>> getCarsByPriceAndChildrenChair(int minPrice, int maxPrice, boolean childrenChair){
+    public LiveData<List<Car>> getCarsByPriceAndChildrenChair(int minPrice, int maxPrice, String childrenChair){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
         firestore.collection("cars").whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("childrenChair", childrenChair).get().addOnCompleteListener(task -> {
             if(task.isSuccessful() && !task.getResult().isEmpty()){
@@ -154,7 +154,7 @@ public class CarRepository {
         return cars;
     }
 
-    public LiveData<List<Car>> getCarsByAllChoices(int minPrice, int maxPrice, boolean childrenChair, String transmission, String typeOfFuel){
+    public LiveData<List<Car>> getCarsByAllChoices(int minPrice, int maxPrice, String childrenChair, String transmission, String typeOfFuel){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
         firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("transmission", transmission).whereEqualTo("typeOfFuel", typeOfFuel).get().addOnCompleteListener(task -> {
             if(task.isSuccessful() && !task.getResult().isEmpty()){
@@ -167,7 +167,7 @@ public class CarRepository {
         return cars;
     }
 
-    public LiveData<List<Car>> getCarsWithoutTransmission(int minPrice, int maxPrice, boolean childrenChair, String typeOfFuel){
+    public LiveData<List<Car>> getCarsWithoutTransmission(int minPrice, int maxPrice, String childrenChair, String typeOfFuel){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
         firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("typeOfFuel", typeOfFuel).get().addOnCompleteListener(task -> {
             if(task.isSuccessful() && !task.getResult().isEmpty()){
@@ -180,7 +180,7 @@ public class CarRepository {
         return cars;
     }
 
-    public LiveData<List<Car>> getCarsWithoutTypeOfFuel(int minPrice, int maxPrice, boolean childrenChair, String transmission){
+    public LiveData<List<Car>> getCarsWithoutTypeOfFuel(int minPrice, int maxPrice, String childrenChair, String transmission){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
         firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("transmission", transmission).get().addOnCompleteListener(task -> {
             if(task.isSuccessful() && !task.getResult().isEmpty()){
