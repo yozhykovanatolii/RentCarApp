@@ -1,6 +1,8 @@
 package com.example.myapplication.rentcarapp.model.firestore.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Car implements Serializable {
     private String ID;
@@ -8,7 +10,7 @@ public class Car implements Serializable {
     private String transmission;
     private String typeOfFuel;
     private int price;
-    private String photo;
+    private List<String> photo = new ArrayList<>();
     private String childrenChair;
     private double fuel;
     private String engineVolume;
@@ -55,11 +57,11 @@ public class Car implements Serializable {
         this.price = price;
     }
 
-    public String getPhoto() {
+    public List<String> getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(List<String> photo) {
         this.photo = photo;
     }
 

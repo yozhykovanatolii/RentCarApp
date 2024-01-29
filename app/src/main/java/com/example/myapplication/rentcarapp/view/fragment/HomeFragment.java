@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -50,7 +51,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     CarAdapter carAdapter;
     List<Car> listCar;
     ShapeableImageView homeAvatar;
-    GridLayoutManager gridLayoutManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,10 +133,9 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
     private void initRecyclerView(List<Car> cars){
         listCar = cars;
-        gridLayoutManager = new GridLayoutManager(getContext(), 2);
         carAdapter = new CarAdapter(cars, this);
         carList.setAdapter(carAdapter);
-        carList.setLayoutManager(gridLayoutManager);
+        carList.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void filtersCars(View view){

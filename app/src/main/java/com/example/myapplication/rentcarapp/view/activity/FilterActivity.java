@@ -3,6 +3,8 @@ package com.example.myapplication.rentcarapp.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.Barrier;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.BroadcastReceiver;
@@ -11,6 +13,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -141,18 +144,32 @@ public class FilterActivity extends AppCompatActivity {
         if(isCardMechanicClicked){
             transmission = "";
             isCardMechanicClicked = false;
+            changePositionCardGasoline();
             checkAuto.setClickable(true);
+            checkElectric.setVisibility(View.VISIBLE);
             checkMechanic.setCardBackgroundColor(getResources().getColor(R.color.white));
             mechanicImage.setImageResource(R.drawable.baseline_settings_24);
             mechanic.setTextColor(getResources().getColor(R.color.blue));
         }else{
             transmission = "Mechanic";
             isCardMechanicClicked = true;
+            changePositionCardGasoline();
             checkAuto.setClickable(false);
+            checkElectric.setVisibility(View.GONE);
             checkMechanic.setCardBackgroundColor(getResources().getColor(R.color.blue));
             mechanicImage.setImageResource(R.drawable.baseline_settings_24_white);
             mechanic.setTextColor(getResources().getColor(R.color.white));
         }
+    }
+
+    private void changePositionCardGasoline(){
+        ViewGroup.MarginLayoutParams cardGasoline = (ViewGroup.MarginLayoutParams) checkGasoline.getLayoutParams();
+        if(isCardMechanicClicked){
+            cardGasoline.setMarginStart(0);
+        }else{
+            cardGasoline.setMarginStart(30);
+        }
+        checkGasoline.setLayoutParams(cardGasoline);
     }
 
     public void clickTypeOfFuel(View view){
@@ -168,6 +185,7 @@ public class FilterActivity extends AppCompatActivity {
             typeOfFuel = "";
             isCardElectricClicked = false;
             checkGasoline.setClickable(true);
+            checkMechanic.setVisibility(View.VISIBLE);
             checkElectric.setCardBackgroundColor(getResources().getColor(R.color.white));
             electricImage.setImageResource(R.drawable.baseline_battery_charging_full_24);
             electric.setTextColor(getResources().getColor(R.color.blue));
@@ -175,6 +193,7 @@ public class FilterActivity extends AppCompatActivity {
             typeOfFuel = "Electric";
             isCardElectricClicked = true;
             checkGasoline.setClickable(false);
+            checkMechanic.setVisibility(View.GONE);
             checkElectric.setCardBackgroundColor(getResources().getColor(R.color.blue));
             electricImage.setImageResource(R.drawable.baseline_battery_charging_full_24_white);
             electric.setTextColor(getResources().getColor(R.color.white));

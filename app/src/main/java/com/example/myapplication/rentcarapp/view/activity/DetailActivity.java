@@ -100,7 +100,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initData(){
-        Picasso.get().load(car.getPhoto()).into(photo);
+        //Picasso.get().load(car.getPhoto()).into(photo);
         transmissionText.setText(car.getTransmission());
         fuelText.setText(car.getTypeOfFuel());
         engineVolumeText.setText(car.getEngineVolume());

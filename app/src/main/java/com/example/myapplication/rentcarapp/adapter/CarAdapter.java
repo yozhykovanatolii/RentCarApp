@@ -34,9 +34,9 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Car car = cars.get(position);
-        Picasso.get().load(car.getPhoto()).into(holder.photoCar);
+        Picasso.get().load(car.getPhoto().get(0)).into(holder.photoCar);
         holder.modelCar.setText(car.getModel());
-        holder.priceCar.setText(car.getPrice() + "/Day");
+        holder.priceCar.setText(car.getPrice() + " ₴/Day");
     }
 
     @Override
