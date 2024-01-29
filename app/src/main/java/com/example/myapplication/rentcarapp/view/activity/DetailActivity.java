@@ -64,7 +64,7 @@ public class DetailActivity extends AppCompatActivity {
         engineVolumeText = findViewById(R.id.engineVolume);
         fuelConsumptionText = findViewById(R.id.fuelConsumption);
         childrenChairText = findViewById(R.id.childrenChair);
-        priceText = findViewById(R.id.price);
+        //priceText = findViewById(R.id.price);
         initButtons();
     }
 
@@ -105,7 +105,7 @@ public class DetailActivity extends AppCompatActivity {
         fuelText.setText(car.getTypeOfFuel());
         engineVolumeText.setText(car.getEngineVolume());
         fuelConsumptionText.setText(car.getFuel() + "/100km");
-        priceText.setText(car.getPrice() + "/Day");
+        //priceText.setText(car.getPrice() + "/Day");
         childrenChairText.setText(car.getChildrenChair());
         getProducerOfModel();
     }
