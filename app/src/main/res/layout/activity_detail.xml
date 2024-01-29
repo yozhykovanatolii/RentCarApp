@@ -330,8 +330,8 @@
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="cardTransmission,cardFuel,cardEngineVolume,cardFuelConsumption,cardChildrenChair"
             app:flow_horizontalGap="10dp"
-            app:layout_constraintEnd_toStartOf="@id/guideline31"
-            app:layout_constraintStart_toEndOf="@id/guideline30"
+            app:layout_constraintEnd_toEndOf="@id/guideline31"
+            app:layout_constraintStart_toStartOf="@id/guideline30"
             app:layout_constraintTop_toBottomOf="@id/guideline35" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

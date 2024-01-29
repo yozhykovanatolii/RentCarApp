@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -101,13 +102,13 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initData(){
         //Picasso.get().load(car.getPhoto()).into(photo);
+        carModel.setText(car.getModel());
         transmissionText.setText(car.getTransmission());
         fuelText.setText(car.getTypeOfFuel());
         engineVolumeText.setText(car.getEngineVolume());
         fuelConsumptionText.setText(car.getFuel() + "/100km");
         //priceText.setText(car.getPrice() + "/Day");
         childrenChairText.setText(car.getChildrenChair());
-        getProducerOfModel();
     }
 
     public void rentCar(View view){
@@ -132,11 +133,6 @@ public class DetailActivity extends AppCompatActivity {
         Intent addDriverLicence = new Intent(DetailActivity.this, AddDriverLicenceActivity.class);
         addDriverLicence.putExtra("AddDriverLicence", dataAboutCar);
         startActivity(addDriverLicence);
-    }
-
-    private void getProducerOfModel(){
-        String model = car.getModel();
-        carViewModel.getProducerByModel(model).observe(this, s -> carModel.setText(s + " " + model));
     }
 
     private void checkCarByRent(){
