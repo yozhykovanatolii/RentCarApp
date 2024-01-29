@@ -106,16 +106,8 @@ public class DetailActivity extends AppCompatActivity {
         engineVolumeText.setText(car.getEngineVolume());
         fuelConsumptionText.setText(car.getFuel() + "/100km");
         priceText.setText(car.getPrice() + "/Day");
-        isExistChildrenChair();
+        childrenChairText.setText(car.getChildrenChair());
         getProducerOfModel();
-    }
-
-    private void isExistChildrenChair(){
-        if(car.isChildrenChair()){
-            childrenChairText.setText("Exist");
-        }else{
-            childrenChairText.setText("Not Exist");
-        }
     }
 
     public void rentCar(View view){

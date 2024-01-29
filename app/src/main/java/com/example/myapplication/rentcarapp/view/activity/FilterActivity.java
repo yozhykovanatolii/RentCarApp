@@ -11,7 +11,10 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
@@ -28,8 +31,15 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class FilterActivity extends AppCompatActivity {
     RangeSlider priceSlider;
     CardView checkAuto, checkMechanic, checkGasoline, checkElectric, existChildrenChair;
+    TextView exist, auto, mechanic, electric, gasoline;
+    ImageView imageView3, autoImage, mechanicImage, electricImage, gasolineImage;
     CarViewModel carViewModel;
     BroadcastReceiver broadcastReceiver;
+    boolean isCardAutoClicked = false;
+    boolean isCardMechanicClicked = false;
+    boolean isCardElectricClicked = false;
+    boolean isCardGasolineClicked = false;
+    boolean isCardExistChildrenChairClicked = false;
     String transmission, typeOfFuel;
     String isChairExist = "Not Exist";
 
@@ -64,6 +74,24 @@ public class FilterActivity extends AppCompatActivity {
         checkGasoline.setOnClickListener(this::clickTypeOfFuel);
         checkElectric = findViewById(R.id.checkElectric);
         checkElectric.setOnClickListener(this::clickTypeOfFuel);
+        initTextsView();
+        initImagesView();
+    }
+
+    private void initTextsView(){
+        exist = findViewById(R.id.exist);
+        auto = findViewById(R.id.auto);
+        mechanic = findViewById(R.id.mechanic);
+        electric = findViewById(R.id.electric);
+        gasoline = findViewById(R.id.gasoline);
+    }
+
+    private void initImagesView(){
+        imageView3 = findViewById(R.id.imageView3);
+        autoImage = findViewById(R.id.autoImage);
+        mechanicImage = findViewById(R.id.mechanicImage);
+        electricImage = findViewById(R.id.electricImage);
+        gasolineImage = findViewById(R.id.gasolineImage);
     }
 
     public void apply(View view){
@@ -85,25 +113,111 @@ public class FilterActivity extends AppCompatActivity {
 
     public void clickTransmissionCards(View view){
         if(view.getId() == R.id.checkAuto){
-            transmission = "Automaton";
-            checkAuto.setCardBackgroundColor(getResources().getColor(R.color.blue));
+            checkCardAuto();
         }if(view.getId() == R.id.checkMechanic){
+            checkCardMechanic();
+        }
+    }
+
+    private void checkCardAuto(){
+        if(isCardAutoClicked){
+            transmission = "";
+            isCardAutoClicked = false;
+            checkMechanic.setClickable(true);
+            checkAuto.setCardBackgroundColor(getResources().getColor(R.color.white));
+            autoImage.setImageResource(R.drawable.baseline_smart_toy_24);
+            auto.setTextColor(getResources().getColor(R.color.blue));
+        }else{
+            transmission = "Automaton";
+            isCardAutoClicked = true;
+            checkMechanic.setClickable(false);
+            checkAuto.setCardBackgroundColor(getResources().getColor(R.color.blue));
+            autoImage.setImageResource(R.drawable.baseline_smart_toy_24_white);
+            auto.setTextColor(getResources().getColor(R.color.white));
+        }
+    }
+
+    private void checkCardMechanic(){
+        if(isCardMechanicClicked){
+            transmission = "";
+            isCardMechanicClicked = false;
+            checkAuto.setClickable(true);
+            checkMechanic.setCardBackgroundColor(getResources().getColor(R.color.white));
+            mechanicImage.setImageResource(R.drawable.baseline_settings_24);
+            mechanic.setTextColor(getResources().getColor(R.color.blue));
+        }else{
             transmission = "Mechanic";
+            isCardMechanicClicked = true;
+            checkAuto.setClickable(false);
             checkMechanic.setCardBackgroundColor(getResources().getColor(R.color.blue));
+            mechanicImage.setImageResource(R.drawable.baseline_settings_24_white);
+            mechanic.setTextColor(getResources().getColor(R.color.white));
         }
     }
 
     public void clickTypeOfFuel(View view){
         if(view.getId() == R.id.checkElectric){
-            typeOfFuel = "Electric";
+            checkCardElectric();
         }if(view.getId() == R.id.checkGasoline){
+            checkCardGasoline();
+        }
+    }
+
+    private void checkCardElectric(){
+        if(isCardElectricClicked){
+            typeOfFuel = "";
+            isCardElectricClicked = false;
+            checkGasoline.setClickable(true);
+            checkElectric.setCardBackgroundColor(getResources().getColor(R.color.white));
+            electricImage.setImageResource(R.drawable.baseline_battery_charging_full_24);
+            electric.setTextColor(getResources().getColor(R.color.blue));
+        }else{
+            typeOfFuel = "Electric";
+            isCardElectricClicked = true;
+            checkGasoline.setClickable(false);
+            checkElectric.setCardBackgroundColor(getResources().getColor(R.color.blue));
+            electricImage.setImageResource(R.drawable.baseline_battery_charging_full_24_white);
+            electric.setTextColor(getResources().getColor(R.color.white));
+        }
+    }
+
+    private void checkCardGasoline(){
+        if(isCardGasolineClicked){
+            typeOfFuel = "";
+            isCardGasolineClicked = false;
+            checkElectric.setClickable(true);
+            checkGasoline.setCardBackgroundColor(getResources().getColor(R.color.white));
+            gasolineImage.setImageResource(R.drawable.baseline_local_gas_station_24);
+            gasoline.setTextColor(getResources().getColor(R.color.blue));
+        }else{
             typeOfFuel = "Gasoline";
+            isCardGasolineClicked = true;
+            checkElectric.setClickable(false);
+            checkGasoline.setCardBackgroundColor(getResources().getColor(R.color.blue));
+            gasolineImage.setImageResource(R.drawable.baseline_local_gas_station_24_white);
+            gasoline.setTextColor(getResources().getColor(R.color.white));
         }
     }
 
     public void clickExistChildrenChair(View view){
         if(view.getId() == R.id.existChildrenChair){
+            checkCardExistChildrenChair();
+        }
+    }
+
+    private void checkCardExistChildrenChair(){
+        if(isCardExistChildrenChairClicked){
+            isChairExist = "Not Exist";
+            isCardExistChildrenChairClicked = false;
+            existChildrenChair.setCardBackgroundColor(getResources().getColor(R.color.white));
+            imageView3.setImageResource(R.drawable.baseline_child_care_24);
+            exist.setTextColor(getResources().getColor(R.color.blue));
+        }else{
             isChairExist = "Exist";
+            isCardExistChildrenChairClicked = true;
+            existChildrenChair.setCardBackgroundColor(getResources().getColor(R.color.blue));
+            imageView3.setImageResource(R.drawable.baseline_child_care_24_white);
+            exist.setTextColor(getResources().getColor(R.color.white));
         }
     }
 
