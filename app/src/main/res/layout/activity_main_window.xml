@@ -20,7 +20,8 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigationBottom"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:0.17"
         android:background="@color/black"
         app:itemIconTint="@color/icon_tinit_selector"
         app:itemTextColor="@color/icon_tinit_selector"

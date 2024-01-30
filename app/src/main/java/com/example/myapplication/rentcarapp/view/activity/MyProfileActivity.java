@@ -2,21 +2,18 @@ package com.example.myapplication.rentcarapp.view.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+
 import androidx.lifecycle.ViewModelProvider;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.Uri;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -181,16 +178,6 @@ public class MyProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUsername(String username){
-        authViewModel.getUserByUsername(username).observe(this, user -> {
-            if(user != null){
-                errorUsername.setVisibility(View.VISIBLE);
-            }else{
-                errorUsername.setVisibility(View.GONE);
-            }
-        });
-    }
-
     private boolean checkFullName(String fullName){
         AtomicBoolean isFullNameCorrect = new AtomicBoolean(false);
         authViewModel.isFullNameWriteCorrect(fullName).observe(this, aBoolean -> {
@@ -229,6 +216,12 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
         return isPhoneNumberWriteCorrect.get();
+    }
+
+    public void logOut(View view){
+        authViewModel.logOut();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void back(View view){

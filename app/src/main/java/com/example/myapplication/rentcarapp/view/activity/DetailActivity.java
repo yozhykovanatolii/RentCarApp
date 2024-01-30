@@ -1,5 +1,6 @@
 package com.example.myapplication.rentcarapp.view.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,6 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ActionTypes;
+import com.denzcoskun.imageslider.constants.AnimationTypes;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.interfaces.ItemClickListener;
+import com.denzcoskun.imageslider.interfaces.TouchListener;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
 import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
@@ -24,6 +32,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,11 +40,12 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class DetailActivity extends AppCompatActivity {
-    ImageView photo;
-    TextView carModel, transmissionText, fuelText, engineVolumeText, fuelConsumptionText, childrenChairText, priceText;
+    TextView carModel, transmissionText, fuelText, engineVolumeText, fuelConsumptionText, childrenChairText;
     MaterialButton materialButton;
     FloatingActionButton favoriteButton;
+    ImageSlider imageSlider;
     Car car;
+    ArrayList<SlideModel> imageList;
     CarViewModel carViewModel;
     BroadcastReceiver broadcastReceiver;
 
@@ -45,10 +55,12 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         car = (Car) getIntent().getSerializableExtra("Car");
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
+        imageList = new ArrayList<>();
         initComponents();
         initData();
         checkCarByRent();
         checkIsFavorite();
+        clickOnImage();
     }
 
     @Override
@@ -58,14 +70,13 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initComponents(){
-        photo = findViewById(R.id.imageView7);
+        imageSlider = findViewById(R.id.imageSlider);
         carModel = findViewById(R.id.carModel);
         transmissionText = findViewById(R.id.textView4);
         fuelText = findViewById(R.id.fuel);
         engineVolumeText = findViewById(R.id.engineVolume);
         fuelConsumptionText = findViewById(R.id.fuelConsumption);
         childrenChairText = findViewById(R.id.childrenChair);
-        //priceText = findViewById(R.id.price);
         initButtons();
     }
 
@@ -101,14 +112,22 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initData(){
-        //Picasso.get().load(car.getPhoto()).into(photo);
         carModel.setText(car.getModel());
         transmissionText.setText(car.getTransmission());
         fuelText.setText(car.getTypeOfFuel());
         engineVolumeText.setText(car.getEngineVolume());
         fuelConsumptionText.setText(car.getFuel() + "/100km");
-        //priceText.setText(car.getPrice() + "/Day");
+        materialButton.setText("Rent: " + car.getPrice() + " ₴/Day");
         childrenChairText.setText(car.getChildrenChair());
+        initImages();
+    }
+
+    private void initImages(){
+        for(String image: car.getPhoto()){
+            imageList.add(new SlideModel(image, ScaleTypes.CENTER_CROP));
+        }
+        imageSlider.setImageList(imageList);
+        imageSlider.setSlideAnimation(AnimationTypes.ZOOM_OUT);
     }
 
     public void rentCar(View view){
@@ -120,6 +139,20 @@ public class DetailActivity extends AppCompatActivity {
             }else{
                 goToAddDriverLicence(dataAboutCar);
             }
+        });
+    }
+
+    private void clickOnImage(){
+        imageSlider.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onItemSelected(int i) {
+                Intent intent = new Intent(DetailActivity.this, ZoomImageActivity.class);
+                intent.putExtra("Image", imageList.get(i).getImageUrl());
+                startActivity(intent);
+            }
+
+            @Override
+            public void doubleClick(int i) {}
         });
     }
 

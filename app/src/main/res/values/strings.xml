@@ -30,6 +30,7 @@
     <string name="book_now">Book Now</string>
     <string name="information">Information</string>
     <string name="rent_car">Rent Car</string>
+    <string name="rent_car_with_price">Rent: 2800 ₴/Day</string>
     <string name="transmission">Transmission</string>
     <string name="type_of_fuel">Type of fuel</string>
     <string name="fuel_consumption">Fuel outlay</string>
@@ -111,4 +112,6 @@
     <string name="errorCreditCard">Credit card number must have only 19 symbols and spaces.</string>
     <string name="errorDateOfCard">Date mush be like this: 10/23.</string>
     <string name="errorSpecialCode">Special code must be like this: 234.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

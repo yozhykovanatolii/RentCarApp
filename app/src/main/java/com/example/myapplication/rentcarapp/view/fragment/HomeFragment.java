@@ -7,17 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,9 +21,7 @@ import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.adapter.CarAdapter;
 import com.example.myapplication.rentcarapp.adapter.RecyclerViewInterface;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
-import com.example.myapplication.rentcarapp.model.firestore.models.Client;
 import com.example.myapplication.rentcarapp.view.activity.DetailActivity;
-import com.example.myapplication.rentcarapp.view.activity.FavoriteCarsActivity;
 import com.example.myapplication.rentcarapp.view.activity.FilterActivity;
 import com.example.myapplication.rentcarapp.view.activity.MainWindowActivity;
 import com.example.myapplication.rentcarapp.view.activity.MyProfileActivity;
@@ -44,7 +38,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class HomeFragment extends Fragment implements RecyclerViewInterface {
     RecyclerView carList;
     SearchView searchView;
-    ImageView heart;
     TextView homeUsername;
     FloatingActionButton filter;
     CarViewModel carViewModel;
@@ -56,7 +49,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-
     }
 
     @Override
@@ -75,8 +67,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         searchView = view.findViewById(R.id.searchView);
         filter = view.findViewById(R.id.floatingActionButton);
         filter.setOnClickListener(this::filtersCars);
-        heart = view.findViewById(R.id.heart);
-        heart.setOnClickListener(this::goToFavoriteCars);
         isExistFilterData();
         searchCar();
     }
@@ -140,11 +130,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
     private void filtersCars(View view){
         Intent intent = new Intent(getActivity(), FilterActivity.class);
-        startActivity(intent);
-    }
-
-    private void goToFavoriteCars(View view){
-        Intent intent = new Intent(getActivity(), FavoriteCarsActivity.class);
         startActivity(intent);
     }
 
