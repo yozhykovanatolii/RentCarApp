@@ -1,9 +1,12 @@
 package com.example.myapplication.rentcarapp.view.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -11,9 +14,13 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,25 +32,39 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.interfaces.TouchListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.myapplication.rentcarapp.R;
+import com.example.myapplication.rentcarapp.adapter.ReviewAdapter;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
+import com.example.myapplication.rentcarapp.model.firestore.models.Client;
+import com.example.myapplication.rentcarapp.model.firestore.models.Review;
 import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
 import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Random;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class DetailActivity extends AppCompatActivity {
     TextView carModel, transmissionText, fuelText, engineVolumeText, fuelConsumptionText, childrenChairText;
-    MaterialButton materialButton;
+    TextInputEditText reviewText;
+    RatingBar ratingBar;
+    AlertDialog alertDialog;
+    MaterialButton materialButton, sendReviewButton;
     FloatingActionButton favoriteButton;
     ImageSlider imageSlider;
+    RecyclerView reviewsList;
+    ReviewAdapter reviewAdapter;
     Car car;
     ArrayList<SlideModel> imageList;
     CarViewModel carViewModel;
@@ -67,10 +88,14 @@ public class DetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initBroadcastReceiver();
+        //Метод, который запрашивает отзывы по конкретному автомобилю
+        getAllIDUsersReviewByCar();
+        //...........................................................
     }
 
     private void initComponents(){
         imageSlider = findViewById(R.id.imageSlider);
+        reviewsList = findViewById(R.id.reviewsList);
         carModel = findViewById(R.id.carModel);
         transmissionText = findViewById(R.id.textView4);
         fuelText = findViewById(R.id.fuel);
@@ -140,6 +165,99 @@ public class DetailActivity extends AppCompatActivity {
                 goToAddDriverLicence(dataAboutCar);
             }
         });
+    }
+
+    public void leaveReview(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View layout_dialog = LayoutInflater.from(this).inflate(R.layout.leave_review, null);
+        builder.setView(layout_dialog);
+        sendReviewButton = layout_dialog.findViewById(R.id.sendReviewButton);
+        reviewText = layout_dialog.findViewById(R.id.reviewText);
+        ratingBar = layout_dialog.findViewById(R.id.ratingBar);
+        alertDialog = builder.create();
+        alertDialog.show();
+        editReviewText();
+        sendReviewButton.setOnClickListener(this::sendReview);
+    }
+
+    private void editReviewText(){
+        reviewText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkReviewTextAndRatingBar();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void checkReviewTextAndRatingBar(){
+        carViewModel.checkReviewTextAndRating(Objects.requireNonNull(reviewText.getText()).length(), ratingBar.getRating()).observe(this, aBoolean -> {
+            if(aBoolean){
+                sendReviewButton.setClickable(true);
+                sendReviewButton.setTextColor(getResources().getColor(R.color.white));
+            }else{
+                sendReviewButton.setClickable(false);
+                sendReviewButton.setTextColor(getResources().getColor(R.color.gray));
+            }
+        });
+    }
+
+    private void getAllIDUsersReviewByCar(){
+        carViewModel.getAllUsersReviewByCar(car.getID()).observe(this, strings -> {
+            if(strings != null){
+                getAllUsersReviewByTheirID(strings);
+            }
+        });
+    }
+
+    private void getAllUsersReviewByTheirID(List<String> usersID){
+        carViewModel.getAllUsersByTheirID(usersID).observe(this, strings -> {
+            if(strings != null){
+                getAllReviewsByCar(strings);
+            }
+        });
+    }
+
+    private void getAllReviewsByCar(List<String> users){
+        carViewModel.getAllReviewsByCar(car.getID()).observe(this, reviews -> {
+            if(reviews != null){
+                initRecyclerView(users, reviews);
+            }
+        });
+    }
+
+    private void initRecyclerView(List<String> users, List<Review> reviews){
+        reviewAdapter = new ReviewAdapter(users, reviews);
+        reviewsList.setAdapter(reviewAdapter);
+        reviewsList.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void sendReview(View view){
+        getClient();
+    }
+
+    private void getClient(){
+        carViewModel.getClient().observe(this, client -> {
+            if(client != null){
+                leaveFeadback(client.getToken());
+            }
+        });
+    }
+
+    private void leaveFeadback(String idClient){
+        Random random = new Random();
+        String id = String.valueOf(random.nextInt(10000));
+        float rating = ratingBar.getRating();
+        String text = Objects.requireNonNull(reviewText.getText()).toString();
+        String currentDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+        Review review = new Review(id, idClient, car.getID(), rating, text, currentDate);
+        carViewModel.createReview(review);
+        alertDialog.dismiss();
     }
 
     private void clickOnImage(){

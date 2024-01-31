@@ -17,6 +17,7 @@ import com.example.myapplication.rentcarapp.model.firestore.models.Car;
 import com.example.myapplication.rentcarapp.model.firestore.models.Client;
 import com.example.myapplication.rentcarapp.model.firestore.models.DriverLicence;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
+import com.example.myapplication.rentcarapp.model.firestore.models.Review;
 import com.example.myapplication.rentcarapp.model.firestore.models.Station;
 import com.example.myapplication.rentcarapp.model.firestore.models.User;
 import com.example.myapplication.rentcarapp.service.CheckRentWorker;
@@ -59,10 +60,8 @@ public class CarRepository {
             String token = firebaseUser.getUid();
             firestore.collection("clients").document(token).get().addOnCompleteListener(task -> {
                 if(task.isSuccessful() && task.getResult().exists()){
-                    Log.i("client", "Successful");
                     clientMutableLiveData.setValue(task.getResult().toObject(Client.class));
                 }else{
-                    Log.i("client", "Unsuccessful");
                     clientMutableLiveData.setValue(null);
                     Log.i("Errors", "Exception:", task.getException());
                 }
@@ -73,10 +72,65 @@ public class CarRepository {
         return clientMutableLiveData;
     }
 
+    public LiveData<List<String>> getAllUsersByTheirID(List<String> usersID){
+        MutableLiveData<List<String>> users = new MutableLiveData<>();
+        List<String> usersName = new ArrayList<>();
+        for(String userID: usersID){
+            firestore.collection("users").document(userID).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful() && task.getResult().exists()){
+                    usersName.add(Objects.requireNonNull(task.getResult().toObject(User.class)).getUsername());
+                }else{
+                    usersName.add(null);
+                    Log.i("Errors", "Exception:", task.getException());
+                }
+            });
+        }
+        users.setValue(usersName);
+        return users;
+    }
+
+    public void createReview(Review review){
+        firestore.collection("reviews").document(review.getId()).set(review).addOnCompleteListener(task -> {
+            if(!task.isSuccessful()){
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
+    }
+
+    public LiveData<List<Review>> getAllReviewsByCar(String idCar){
+        MutableLiveData<List<Review>> reviews = new MutableLiveData<>();
+        firestore.collection("reviews").whereEqualTo("car", idCar).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
+                reviews.setValue(task.getResult().toObjects(Review.class));
+            }else{
+                reviews.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
+        return reviews;
+    }
+
+    public LiveData<List<String>> getAllUsersReviewByCar(String idCar){
+        MutableLiveData<List<String>> usersID = new MutableLiveData<>();
+        firestore.collection("reviews").whereEqualTo("car", idCar).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
+                List<String> listUsers = new ArrayList<>();
+                for(QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()){
+                    listUsers.add(queryDocumentSnapshot.toObject(Review.class).getClient());
+                }
+                usersID.setValue(listUsers);
+            }else{
+                usersID.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
+        return usersID;
+    }
+
     public LiveData<List<Car>> getAllCars(){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
         firestore.collection("cars").get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
                 cars.setValue(task.getResult().toObjects(Car.class));
             }else{
                 cars.setValue(null);
@@ -370,12 +424,9 @@ public class CarRepository {
     }
 
     public void createRent(Rent rent){
-        firestore.collection("rents").document(rent.getId()).set(rent).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(!task.isSuccessful()){
-                    Log.i("Errors", "Exception:", task.getException());
-                }
+        firestore.collection("rents").document(rent.getId()).set(rent).addOnCompleteListener(task -> {
+            if(!task.isSuccessful()){
+                Log.i("Errors", "Exception:", task.getException());
             }
         });
     }

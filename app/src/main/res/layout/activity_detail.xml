@@ -23,10 +23,10 @@
         android:id="@+id/imageSlider"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/guideline34"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guideline34"
-        app:layout_constraintTop_toBottomOf="@id/guideline33"/>
+        app:layout_constraintTop_toBottomOf="@id/guideline33" />
 
     <TextView
         android:id="@+id/carModel"
@@ -53,13 +53,25 @@
         app:layout_constraintStart_toEndOf="@id/guideline30"
         app:layout_constraintTop_toBottomOf="@id/guideline34" />
 
+    <TextView
+        android:id="@+id/reviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reviews"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/guideline31"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/guideline30"
+        app:layout_constraintTop_toBottomOf="@id/guideline20" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:theme="@style/FloatingButton.Color"
         android:onClick="getFavoriteClientsCars"
+        android:theme="@style/FloatingButton.Color"
         app:layout_constraintEnd_toStartOf="@id/guideline31"
         app:layout_constraintStart_toEndOf="@id/carModel"
         app:layout_constraintTop_toBottomOf="@id/guideline32"
@@ -67,17 +79,39 @@
         app:srcCompat="@drawable/heart" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/reviewButton"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:text="@string/write_review"
+        android:textSize="18sp"
+        android:backgroundTint="@color/green"
+        android:onClick="leaveReview"
+        app:cornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline30" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/rentCar"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:backgroundTint="@color/blue"
+        android:onClick="rentCar"
         android:text="@string/rent_car_with_price"
         android:textSize="18sp"
-        android:onClick="rentCar"
         app:cornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline31" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviewsList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintTop_toBottomOf="@id/guideline46"
+        app:layout_constraintBottom_toTopOf="@id/rentCar"
+        app:layout_constraintStart_toEndOf="@id/guideline30"
+        app:layout_constraintEnd_toStartOf="@id/guideline31"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline30"
@@ -112,21 +146,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="333dp" />
+        app:layout_constraintGuide_begin="311dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline35"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="382dp" />
+        app:layout_constraintGuide_begin="357dp" />
 
     <HorizontalScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/guideline35"
+        app:layout_constraintEnd_toStartOf="@id/guideline31"
         app:layout_constraintStart_toEndOf="@id/guideline30"
-        app:layout_constraintEnd_toStartOf="@id/guideline31">
+        app:layout_constraintTop_toBottomOf="@id/guideline35">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -335,5 +369,26 @@
                 tools:ignore="MissingConstraints" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </HorizontalScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="471dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline46"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="514dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline47"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="780dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

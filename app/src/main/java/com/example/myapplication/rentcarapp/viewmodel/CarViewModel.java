@@ -9,6 +9,7 @@ import com.example.myapplication.rentcarapp.model.firestore.models.Car;
 import com.example.myapplication.rentcarapp.model.firestore.models.Client;
 import com.example.myapplication.rentcarapp.model.firestore.models.DriverLicence;
 import com.example.myapplication.rentcarapp.model.firestore.models.Rent;
+import com.example.myapplication.rentcarapp.model.firestore.models.Review;
 import com.example.myapplication.rentcarapp.model.repository.CarRepository;
 
 
@@ -59,10 +60,6 @@ public class CarViewModel extends ViewModel {
         return carRepository.getClientDriverLicence();
     }
 
-    public LiveData<String> getProducerByModel(String model){
-        return carRepository.getProducerByModel(model);
-    }
-
     public LiveData<Boolean> checkCarIfHeWasBook(String idCar){
         return carRepository.checkCarIfHeWasBook(idCar);
     }
@@ -80,6 +77,22 @@ public class CarViewModel extends ViewModel {
 
     public void createDriverLicence(DriverLicence driverLicence){
         carRepository.createDriverLicence(driverLicence);
+    }
+
+    public void createReview(Review review){
+        carRepository.createReview(review);
+    }
+
+    public LiveData<List<Review>> getAllReviewsByCar(String idCar){
+        return carRepository.getAllReviewsByCar(idCar);
+    }
+
+    public LiveData<List<String>> getAllUsersReviewByCar(String idCar){
+        return carRepository.getAllUsersReviewByCar(idCar);
+    }
+
+    public LiveData<List<String>> getAllUsersByTheirID(List<String> usersID){
+        return carRepository.getAllUsersByTheirID(usersID);
     }
 
     public LiveData<String> getClientsUserName(){
@@ -122,22 +135,12 @@ public class CarViewModel extends ViewModel {
         }
     }
 
-    public LiveData<String> choiceTransmission(boolean automaton, boolean mechanic){
-        if(automaton){
-            return new MutableLiveData<>("Automaton");
-        }if(mechanic){
-            return new MutableLiveData<>("Mechanic");
+    public LiveData<Boolean> checkReviewTextAndRating(int lengthReviewText, float rating){
+        if(lengthReviewText > 0 && rating > 0){
+            return new MutableLiveData<>(true);
+        }else{
+            return new MutableLiveData<>(false);
         }
-        return new MutableLiveData<>(null);
-    }
-
-    public LiveData<String> choiceTypeOfFuel(boolean gasoline, boolean diesel){
-        if(gasoline){
-            return new MutableLiveData<>("Gasoline");
-        }if(diesel){
-            return new MutableLiveData<>("Diesel");
-        }
-        return new MutableLiveData<>(null);
     }
 
     public LiveData<List<Car>> confirmChoice(String childrenChair, String transmission, String typeOfFuel, int minPrice, int maxPrice){
