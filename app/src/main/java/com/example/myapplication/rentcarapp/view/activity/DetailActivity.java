@@ -82,15 +82,13 @@ public class DetailActivity extends AppCompatActivity {
         checkCarByRent();
         checkIsFavorite();
         clickOnImage();
+        getAllIDUsersReviewByCar();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         initBroadcastReceiver();
-        //Метод, который запрашивает отзывы по конкретному автомобилю
-        getAllIDUsersReviewByCar();
-        //...........................................................
     }
 
     private void initComponents(){
@@ -257,6 +255,7 @@ public class DetailActivity extends AppCompatActivity {
         String currentDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
         Review review = new Review(id, idClient, car.getID(), rating, text, currentDate);
         carViewModel.createReview(review);
+        getAllIDUsersReviewByCar();
         alertDialog.dismiss();
     }
 
