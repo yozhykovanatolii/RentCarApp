@@ -65,7 +65,11 @@
         android:id="@+id/username"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:textColorHint="@color/light_gray"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:boxStrokeColor="@color/white"
+        app:boxBackgroundColor="@color/gray"
+        android:textColorHint="@color/white"
+        app:hintTextColor="@color/white"
         app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toEndOf="@id/guideline1"
         app:layout_constraintTop_toBottomOf="@id/guideline4">
@@ -74,7 +78,6 @@
             android:id="@+id/signInUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_edittext"
             android:ems="15"
             android:hint="@string/enter_username"
             android:inputType="text"
@@ -87,7 +90,10 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="10dp"
+        app:boxStrokeColor="@color/white"
+        app:boxBackgroundColor="@color/gray"
         android:textColorHint="@color/white"
+        app:hintTextColor="@color/white"
         app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toEndOf="@id/guideline1"
         app:layout_constraintTop_toBottomOf="@id/errorUsername"
@@ -98,7 +104,6 @@
             android:id="@+id/signInPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_edittext"
             android:ems="15"
             android:hint="@string/enter_password"
             android:inputType="textPassword"
@@ -118,11 +123,23 @@
         app:layout_constraintEnd_toEndOf="@id/password"
         app:layout_constraintTop_toBottomOf="@id/errorPassword" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:indicatorColor="@color/blue"
+        app:trackColor="@color/white"
+        android:visibility="gone"
+        android:indeterminate="true"
+        app:layout_constraintTop_toBottomOf="@id/forgotThePassword"
+        app:layout_constraintEnd_toStartOf="@id/guideline2"
+        app:layout_constraintStart_toEndOf="@id/guideline1"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:backgroundTint="@color/blue"
         android:onClick="signIn"
         android:text="@string/login"
@@ -131,7 +148,7 @@
         app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toEndOf="@id/guideline1"
         app:layout_constraintBottom_toTopOf="@id/googleButton"
-        app:layout_constraintTop_toBottomOf="@id/forgotThePassword" />
+        app:layout_constraintTop_toBottomOf="@id/progressIndicator" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/googleButton"

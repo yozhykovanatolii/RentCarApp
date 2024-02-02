@@ -109,6 +109,20 @@
             app:layout_constraintStart_toEndOf="@id/guideline21"
             app:layout_constraintTop_toBottomOf="@id/mistakeEmail"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/log_out"
+            android:backgroundTint="@color/blue"
+            android:textSize="18sp"
+            app:cornerRadius="5dp"
+            android:onClick="logOut"
+            app:layout_constraintStart_toEndOf="@id/guideline21"
+            app:layout_constraintTop_toBottomOf="@id/updateUserPassword"
+            app:layout_constraintEnd_toStartOf="@id/guideline22"/>
+
         <TextView
             android:id="@+id/errorUsername"
             android:layout_width="wrap_content"
@@ -182,8 +196,10 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="5dp"
+            app:boxStrokeColor="@color/white"
+            app:boxBackgroundColor="@color/gray"
             android:textColorHint="@color/white"
-            app:hintTextColor="#F6F4F4"
+            app:hintTextColor="@color/white"
             app:layout_constraintEnd_toStartOf="@id/guideline22"
             app:layout_constraintStart_toEndOf="@id/guideline21"
             app:layout_constraintTop_toBottomOf="@id/userLabel">
@@ -192,7 +208,6 @@
                 android:id="@+id/accountUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_edittext"
                 android:ems="15"
                 android:inputType="text"
                 android:textColor="@color/white"
@@ -204,7 +219,10 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="5dp"
+            app:boxStrokeColor="@color/white"
+            app:boxBackgroundColor="@color/gray"
             android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/fullNameLabel"
             app:layout_constraintStart_toEndOf="@id/guideline21"
             app:layout_constraintEnd_toStartOf="@id/guideline22">
@@ -213,7 +231,6 @@
                 android:id="@+id/accountFullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_edittext"
                 android:ems="15"
                 android:inputType="text"
                 android:textColor="@color/white" />
@@ -224,7 +241,10 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
+            app:boxStrokeColor="@color/white"
+            app:boxBackgroundColor="@color/gray"
             android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/phoneLabel"
             app:layout_constraintStart_toEndOf="@id/guideline21"
             app:layout_constraintEnd_toStartOf="@id/guideline22">
@@ -233,7 +253,6 @@
                 android:id="@+id/accountPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_edittext"
                 android:ems="15"
                 android:inputType="text"
                 android:textColor="@color/white" />
@@ -244,7 +263,10 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="5dp"
+            app:boxStrokeColor="@color/white"
+            app:boxBackgroundColor="@color/gray"
             android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/emailLabel"
             app:layout_constraintStart_toEndOf="@id/guideline21"
             app:layout_constraintEnd_toStartOf="@id/guideline22">
@@ -253,7 +275,6 @@
                 android:id="@+id/accountEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_edittext"
                 android:ems="15"
                 android:inputType="text"
                 android:textColor="@color/white" />
@@ -264,7 +285,10 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="5dp"
+            app:boxStrokeColor="@color/white"
+            app:boxBackgroundColor="@color/gray"
             android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/passwordLabel"
             app:layout_constraintStart_toEndOf="@id/guideline21"
             app:layout_constraintEnd_toStartOf="@id/guideline22"
@@ -275,7 +299,6 @@
                 android:id="@+id/accountUserPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_edittext"
                 android:ems="15"
                 android:inputType="text"
                 android:textColor="@color/white" />

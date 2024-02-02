@@ -34,9 +34,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Car car = cars.get(position);
-        Picasso.get().load(car.getPhoto()).into(holder.photoCar);
+        Picasso.get().load(car.getPhoto().get(0)).into(holder.photoCar);
         holder.modelCar.setText(car.getModel());
-        holder.priceCar.setText(car.getPrice() + "/Day");
+        holder.avgRating.setText(Float.toString(car.getAvgRating()));
+        holder.priceCar.setText(car.getPrice() + " ₴/Day");
     }
 
     @Override
@@ -46,12 +47,13 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView photoCar;
-        TextView modelCar, priceCar;
+        TextView modelCar, avgRating, priceCar;
 
         public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             photoCar = itemView.findViewById(R.id.photoCar);
             modelCar = itemView.findViewById(R.id.modelCar);
+            avgRating = itemView.findViewById(R.id.avgRating);
             priceCar = itemView.findViewById(R.id.priceCar);
 
             itemView.setOnClickListener(view -> {

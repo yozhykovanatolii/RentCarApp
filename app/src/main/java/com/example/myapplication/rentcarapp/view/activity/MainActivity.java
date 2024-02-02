@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     AuthViewModel authViewModel;
     TextInputEditText signInUsername, signInPassword;
     TextView incorrect_username, incorrect_password;
+    CircularProgressIndicator progressIndicator;
     GoogleSignInClient googleSignInClient;
     BroadcastReceiver broadcastReceiver;
     @Override
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initComponents(){
+        progressIndicator = findViewById(R.id.progressIndicator);
         signInUsername = findViewById(R.id.signInUsername);
         signInPassword = findViewById(R.id.signInPassword);
         incorrect_username = findViewById(R.id.errorUsername);
@@ -124,10 +127,12 @@ public class MainActivity extends AppCompatActivity {
     public void signIn(View view){
         String username = Objects.requireNonNull(signInUsername.getText()).toString();
         String password = Objects.requireNonNull(signInPassword.getText()).toString();
+        progressIndicator.setVisibility(View.VISIBLE);
         authViewModel.getUserByUsernameAndPassword(username, password).observe(this, user -> {
             if(user != null){
                 getClientEmail(user);
             }else{
+                progressIndicator.setVisibility(View.GONE);
                 incorrect_username.setVisibility(View.VISIBLE);
                 incorrect_password.setVisibility(View.VISIBLE);
             }
@@ -173,9 +178,9 @@ public class MainActivity extends AppCompatActivity {
     private void getClientEmail(User user){
         authViewModel.getClientEmailByToken(user.getToken()).observe(this, s -> {
             if(s != null){
-                Log.i("Email", s);
                 authorization(s);
             }else{
+                progressIndicator.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Something was happened. Error", Toast.LENGTH_LONG).show();
             }
         });
@@ -188,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, MainWindowActivity.class);
                 startActivity(intent);
             }else{
+                progressIndicator.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Something was happened. Error", Toast.LENGTH_LONG).show();
             }
         });

@@ -19,9 +19,24 @@
             android:layout_height="wrap_content"
             android:text="@string/price"
             android:textColor="@color/white"
+            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toBottomOf="@id/guideline38"
+            app:layout_constraintStart_toEndOf="@id/guideline36"
+            app:layout_constraintEnd_toStartOf="@id/guideline37"/>
+
+        <TextView
+            android:id="@+id/childrenChairFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/children_chair"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toBottomOf="@id/priceSlider"
             app:layout_constraintStart_toEndOf="@id/guideline36"
             app:layout_constraintEnd_toStartOf="@id/guideline37"/>
 
@@ -32,9 +47,10 @@
             android:layout_marginTop="10dp"
             android:text="@string/transmission"
             android:textColor="@color/white"
+            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toBottomOf="@id/checkChilderChair"
+            app:layout_constraintTop_toBottomOf="@id/checkGasoline"
             app:layout_constraintStart_toEndOf="@id/guideline36"
             app:layout_constraintEnd_toStartOf="@id/guideline37"/>
 
@@ -45,89 +61,242 @@
             android:layout_marginTop="10dp"
             android:text="@string/type_of_fuel"
             android:textColor="@color/white"
+            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toBottomOf="@id/checkMechanic"
+            app:layout_constraintTop_toBottomOf="@id/existChildrenChair"
             app:layout_constraintStart_toEndOf="@id/guideline36"
             app:layout_constraintEnd_toStartOf="@id/guideline37"/>
 
-        <RadioButton
-            android:id="@+id/checkChilderChair"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/children_chair"
-            android:textColor="@color/white"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/existChildrenChair"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            app:cardCornerRadius="10dp"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toBottomOf="@id/priceSlider"
+            app:layout_constraintTop_toBottomOf="@id/childrenChairFilter"
             app:layout_constraintStart_toEndOf="@id/guideline36"
-            app:layout_constraintEnd_toStartOf="@id/guideline37"/>
+            app:layout_constraintEnd_toStartOf="@id/guideline37">
 
-        <RadioButton
-            android:id="@+id/checkAutomaton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/automaton"
-            android:textColor="@color/white"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_constraintDimensionRatio="1:0.3"
+                    android:src="@drawable/baseline_child_care_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/exist"/>
+
+                <TextView
+                    android:id="@+id/exist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Exist"
+                    android:textColor="@color/blue"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imageView3"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/checkElectric"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            app:cardCornerRadius="10dp"
+            android:visibility="visible"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@id/typeOfFuelFilter"
+            app:layout_constraintStart_toEndOf="@id/guideline36"
+            app:layout_constraintEnd_toStartOf="@id/barrier">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/electricImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_constraintDimensionRatio="1:0.3"
+                    android:src="@drawable/baseline_battery_charging_full_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/electric"/>
+
+                <TextView
+                    android:id="@+id/electric"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Electric"
+                    android:textColor="@color/blue"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/electricImage"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/checkGasoline"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toBottomOf="@id/typeOfFuelFilter"
+            app:layout_constraintStart_toEndOf="@id/checkElectric"
+            app:layout_constraintEnd_toStartOf="@id/guideline37">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/gasolineImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_constraintDimensionRatio="1:0.3"
+                    android:src="@drawable/baseline_local_gas_station_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/gasoline"/>
+
+                <TextView
+                    android:id="@+id/gasoline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gasoline"
+                    android:textColor="@color/blue"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/gasolineImage"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/checkAuto"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            app:cardCornerRadius="10dp"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toBottomOf="@id/transmissionFilter"
             app:layout_constraintStart_toEndOf="@id/guideline36"
-            app:layout_constraintEnd_toStartOf="@id/guideline37"/>
+            app:layout_constraintEnd_toStartOf="@id/guideline37">
 
-        <RadioButton
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/autoImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_constraintDimensionRatio="1:0.3"
+                    android:src="@drawable/baseline_smart_toy_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/auto"/>
+
+                <TextView
+                    android:id="@+id/auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/automatic"
+                    android:textColor="@color/blue"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/autoImage"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/checkMechanic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/mechanic"
-            android:textColor="@color/white"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            app:cardCornerRadius="10dp"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toBottomOf="@id/checkAutomaton"
-            app:layout_constraintStart_toEndOf="@id/guideline36"
-            app:layout_constraintEnd_toStartOf="@id/guideline37"/>
+            app:layout_constraintTop_toBottomOf="@id/transmissionFilter"
+            app:layout_constraintStart_toEndOf="@id/checkAuto"
+            app:layout_constraintEnd_toStartOf="@id/guideline37">
 
-        <RadioButton
-            android:id="@+id/checkGasoline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/gasoline"
-            android:textColor="@color/white"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toBottomOf="@id/typeOfFuelFilter"
-            app:layout_constraintStart_toEndOf="@id/guideline36"
-            app:layout_constraintEnd_toStartOf="@id/guideline37"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <RadioButton
-            android:id="@+id/checkDiesel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/diesel"
-            android:textColor="@color/white"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toBottomOf="@id/checkGasoline"
-            app:layout_constraintStart_toEndOf="@id/guideline36"
-            app:layout_constraintEnd_toStartOf="@id/guideline37"/>
+                <ImageView
+                    android:id="@+id/mechanicImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_constraintDimensionRatio="1:0.3"
+                    android:src="@drawable/baseline_settings_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/mechanic"/>
 
-
+                <TextView
+                    android:id="@+id/mechanic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mechanic"
+                    android:textColor="@color/blue"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mechanicImage"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/apply"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="30dp"
             android:text="@string/apply"
             android:textSize="17sp"
             android:backgroundTint="@color/blue"
             android:onClick="apply"
             app:cornerRadius="5dp"
-            app:layout_constraintTop_toBottomOf="@id/checkDiesel"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/guideline36"
             app:layout_constraintEnd_toStartOf="@id/guideline37"/>
 
@@ -135,7 +304,8 @@
             android:id="@+id/priceSlider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="10dp"
+
             android:contentDescription="@string/app_name"
             android:stepSize="10"
             android:valueFrom="1300"
@@ -166,6 +336,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="27dp" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="right"
+            app:constraint_referenced_ids="checkElectric" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

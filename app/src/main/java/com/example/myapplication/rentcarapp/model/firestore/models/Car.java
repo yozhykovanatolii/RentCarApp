@@ -1,6 +1,8 @@
 package com.example.myapplication.rentcarapp.model.firestore.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Car implements Serializable {
     private String ID;
@@ -8,8 +10,9 @@ public class Car implements Serializable {
     private String transmission;
     private String typeOfFuel;
     private int price;
-    private String photo;
-    private boolean childrenChair;
+    private List<String> photo = new ArrayList<>();
+    private float avgRating;
+    private String childrenChair;
     private double fuel;
     private String engineVolume;
 
@@ -55,21 +58,25 @@ public class Car implements Serializable {
         this.price = price;
     }
 
-    public String getPhoto() {
+    public List<String> getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(List<String> photo) {
         this.photo = photo;
     }
 
-    public boolean isChildrenChair() {
-        return childrenChair;
+    public float getAvgRating() {
+        return avgRating;
     }
 
-    public void setChildrenChair(boolean childrenChair) {
-        this.childrenChair = childrenChair;
+    public void setAvgRating(float avgRating) {
+        this.avgRating = avgRating;
     }
+
+    public String getChildrenChair() {return childrenChair;}
+
+    public void setChildrenChair(String childrenChair) {this.childrenChair = childrenChair;}
 
     public double getFuel() {
         return fuel;

@@ -7,16 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +21,7 @@ import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.adapter.CarAdapter;
 import com.example.myapplication.rentcarapp.adapter.RecyclerViewInterface;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
-import com.example.myapplication.rentcarapp.model.firestore.models.Client;
 import com.example.myapplication.rentcarapp.view.activity.DetailActivity;
-import com.example.myapplication.rentcarapp.view.activity.FavoriteCarsActivity;
 import com.example.myapplication.rentcarapp.view.activity.FilterActivity;
 import com.example.myapplication.rentcarapp.view.activity.MainWindowActivity;
 import com.example.myapplication.rentcarapp.view.activity.MyProfileActivity;
@@ -43,20 +38,17 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class HomeFragment extends Fragment implements RecyclerViewInterface {
     RecyclerView carList;
     SearchView searchView;
-    ImageView heart;
     TextView homeUsername;
     FloatingActionButton filter;
     CarViewModel carViewModel;
     CarAdapter carAdapter;
     List<Car> listCar;
     ShapeableImageView homeAvatar;
-    GridLayoutManager gridLayoutManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         carViewModel = new ViewModelProvider(this).get(CarViewModel.class);
-
     }
 
     @Override
@@ -75,8 +67,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         searchView = view.findViewById(R.id.searchView);
         filter = view.findViewById(R.id.floatingActionButton);
         filter.setOnClickListener(this::filtersCars);
-        heart = view.findViewById(R.id.heart);
-        heart.setOnClickListener(this::goToFavoriteCars);
         isExistFilterData();
         searchCar();
     }
@@ -100,15 +90,12 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private void searchCar(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                getCarByModel(query);
-                Log.i("Item", "");
-                return true;
-            }
+            public boolean onQueryTextSubmit(String query) {return false;}
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                getCarByModel(newText);
+                return true;
             }
         });
     }
@@ -118,8 +105,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             if(cars != null){
                 initRecyclerView(cars);
             }else{
-                initData();
                 Toast.makeText(getContext(), "Sorry, but there is no such car.", Toast.LENGTH_LONG).show();
+                initData();
             }
         });
     }
@@ -136,19 +123,13 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
     private void initRecyclerView(List<Car> cars){
         listCar = cars;
-        gridLayoutManager = new GridLayoutManager(getContext(), 2);
         carAdapter = new CarAdapter(cars, this);
         carList.setAdapter(carAdapter);
-        carList.setLayoutManager(gridLayoutManager);
+        carList.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void filtersCars(View view){
         Intent intent = new Intent(getActivity(), FilterActivity.class);
-        startActivity(intent);
-    }
-
-    private void goToFavoriteCars(View view){
-        Intent intent = new Intent(getActivity(), FavoriteCarsActivity.class);
         startActivity(intent);
     }
 

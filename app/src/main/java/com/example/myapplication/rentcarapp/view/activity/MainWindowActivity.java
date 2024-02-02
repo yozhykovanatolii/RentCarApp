@@ -1,29 +1,23 @@
 package com.example.myapplication.rentcarapp.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.myapplication.rentcarapp.R;
 import com.example.myapplication.rentcarapp.model.firestore.models.Car;
-import com.example.myapplication.rentcarapp.model.firestore.models.Client;
 import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
-import com.example.myapplication.rentcarapp.view.fragment.AccountFragment;
+import com.example.myapplication.rentcarapp.view.fragment.FavoriteCarsFragment;
 import com.example.myapplication.rentcarapp.view.fragment.HomeFragment;
 import com.example.myapplication.rentcarapp.view.fragment.RentFragment;
-import com.example.myapplication.rentcarapp.viewmodel.AuthViewModel;
 import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.Serializable;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -94,9 +88,9 @@ public class MainWindowActivity extends AppCompatActivity {
                     .setReorderingAllowed(true)
                     .commit();
             return true;
-        }if(item.getItemId() == R.id.account){
+        }if(item.getItemId() == R.id.favorite){
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, AccountFragment.class, null)
+                    .replace(R.id.fragmentContainer, FavoriteCarsFragment.class, null)
                     .setReorderingAllowed(true)
                     .commit();
             return true;

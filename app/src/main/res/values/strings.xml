@@ -30,6 +30,7 @@
     <string name="book_now">Book Now</string>
     <string name="information">Information</string>
     <string name="rent_car">Rent Car</string>
+    <string name="rent_car_with_price">Rent: 2800 ₴/Day</string>
     <string name="transmission">Transmission</string>
     <string name="type_of_fuel">Type of fuel</string>
     <string name="fuel_consumption">Fuel outlay</string>
@@ -39,7 +40,7 @@
     <string name="price">Price</string>
     <string name="from">From</string>
     <string name="to">To</string>
-    <string name="automaton">Automaton</string>
+    <string name="automatic">Automatic</string>
     <string name="mechanic">Mechanic</string>
     <string name="gasoline">Gasoline</string>
     <string name="diesel">Diesel</string>
@@ -111,4 +112,8 @@
     <string name="errorCreditCard">Credit card number must have only 19 symbols and spaces.</string>
     <string name="errorDateOfCard">Date mush be like this: 10/23.</string>
     <string name="errorSpecialCode">Special code must be like this: 234.</string>
+    <string name="reviews">Reviews</string>
+    <string name="write_review">Leave review</string>
+    <string name="enter_review">Enter your review</string>
+    <string name="send_review">Send review</string>
 </resources>
