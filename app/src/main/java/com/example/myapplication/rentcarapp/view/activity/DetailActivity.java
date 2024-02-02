@@ -56,7 +56,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class DetailActivity extends AppCompatActivity {
-    TextView carModel, transmissionText, fuelText, engineVolumeText, fuelConsumptionText, childrenChairText;
+    TextView carModel, transmissionText, fuelText, engineVolumeText, fuelConsumptionText, childrenChairText, avgRating;
     TextInputEditText reviewText;
     RatingBar ratingBar;
     AlertDialog alertDialog;
@@ -66,6 +66,7 @@ public class DetailActivity extends AppCompatActivity {
     RecyclerView reviewsList;
     ReviewAdapter reviewAdapter;
     Car car;
+    int currentCountReview = 0;
     ArrayList<SlideModel> imageList;
     CarViewModel carViewModel;
     BroadcastReceiver broadcastReceiver;
@@ -100,6 +101,7 @@ public class DetailActivity extends AppCompatActivity {
         engineVolumeText = findViewById(R.id.engineVolume);
         fuelConsumptionText = findViewById(R.id.fuelConsumption);
         childrenChairText = findViewById(R.id.childrenChair);
+        avgRating = findViewById(R.id.ratingAvg);
         initButtons();
     }
 
@@ -142,6 +144,7 @@ public class DetailActivity extends AppCompatActivity {
         fuelConsumptionText.setText(car.getFuel() + "/100km");
         materialButton.setText("Rent: " + car.getPrice() + " ₴/Day");
         childrenChairText.setText(car.getChildrenChair());
+        avgRating.setText(Float.toString(car.getAvgRating()));
         initImages();
     }
 
@@ -230,6 +233,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(List<String> users, List<Review> reviews){
+        currentCountReview = reviews.size();
         reviewAdapter = new ReviewAdapter(users, reviews);
         reviewsList.setAdapter(reviewAdapter);
         reviewsList.setLayoutManager(new LinearLayoutManager(this));
@@ -255,8 +259,17 @@ public class DetailActivity extends AppCompatActivity {
         String currentDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
         Review review = new Review(id, idClient, car.getID(), rating, text, currentDate);
         carViewModel.createReview(review);
+        updateAvgRating(rating);
         getAllIDUsersReviewByCar();
         alertDialog.dismiss();
+    }
+
+    private void updateAvgRating(float rating){
+        float oldRatingTotal = car.getAvgRating() * currentCountReview;
+        float newAvgRating = (oldRatingTotal + rating) / (currentCountReview + 1);
+        newAvgRating = Math.round(newAvgRating * 10.0f) / 10.0f;
+        carViewModel.updateAvgRating(newAvgRating, car.getID());
+        avgRating.setText(Float.toString(newAvgRating));
     }
 
     private void clickOnImage(){

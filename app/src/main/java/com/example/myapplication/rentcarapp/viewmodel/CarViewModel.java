@@ -83,6 +83,10 @@ public class CarViewModel extends ViewModel {
         carRepository.createReview(review);
     }
 
+    public void updateAvgRating(float newAvgRating, String idCar){
+        carRepository.updateAvgRating(newAvgRating, idCar);
+    }
+
     public LiveData<List<Review>> getAllReviewsByCar(String idCar){
         return carRepository.getAllReviewsByCar(idCar);
     }

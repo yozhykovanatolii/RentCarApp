@@ -97,6 +97,14 @@ public class CarRepository {
         });
     }
 
+    public void updateAvgRating(float newAvgRating, String idCar){
+        firestore.collection("cars").document(idCar).update("avgRating", newAvgRating).addOnCompleteListener(task -> {
+            if(!task.isSuccessful()){
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
+    }
+
     public LiveData<List<Review>> getAllReviewsByCar(String idCar){
         MutableLiveData<List<Review>> reviews = new MutableLiveData<>();
         firestore.collection("reviews").whereEqualTo("car", idCar).get().addOnCompleteListener(task -> {
@@ -299,22 +307,18 @@ public class CarRepository {
 
     public LiveData<Boolean> checkCarIfHeWasBook(String idCar){
         MutableLiveData<Boolean> isCarWasAddedInRent = new MutableLiveData<>();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if(firebaseUser != null){
-            String token = firebaseAuth.getUid();
-            firestore.collection("rents").whereEqualTo("car", idCar).whereEqualTo("client", token).get().addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
-                    if(!task.getResult().isEmpty()){
-                        isCarWasAddedInRent.setValue(true);
-                    }else{
-                        isCarWasAddedInRent.setValue(false);
-                    }
+        firestore.collection("rents").whereEqualTo("car", idCar).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                if(!task.getResult().isEmpty()){
+                    isCarWasAddedInRent.setValue(true);
                 }else{
-                    isCarWasAddedInRent.setValue(null);
-                    Log.i("Errors", "Exception:", task.getException());
+                    isCarWasAddedInRent.setValue(false);
                 }
-            });
-        }
+            }else{
+                isCarWasAddedInRent.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
         return isCarWasAddedInRent;
     }
 

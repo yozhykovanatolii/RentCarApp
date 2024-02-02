@@ -11,6 +11,7 @@ public class Car implements Serializable {
     private String typeOfFuel;
     private int price;
     private List<String> photo = new ArrayList<>();
+    private float avgRating;
     private String childrenChair;
     private double fuel;
     private String engineVolume;
@@ -63,6 +64,14 @@ public class Car implements Serializable {
 
     public void setPhoto(List<String> photo) {
         this.photo = photo;
+    }
+
+    public float getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(float avgRating) {
+        this.avgRating = avgRating;
     }
 
     public String getChildrenChair() {return childrenChair;}
