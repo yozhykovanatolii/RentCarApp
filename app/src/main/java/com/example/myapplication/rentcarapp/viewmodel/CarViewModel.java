@@ -1,6 +1,8 @@
 package com.example.myapplication.rentcarapp.viewmodel;
 
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -147,15 +149,24 @@ public class CarViewModel extends ViewModel {
         }
     }
 
-    public LiveData<List<Car>> confirmChoice(String childrenChair, String transmission, String typeOfFuel, int minPrice, int maxPrice){
-        if(isTransmissionEqualNull(transmission, typeOfFuel)){
-            return carRepository.getCarsWithoutTransmission(minPrice, maxPrice, childrenChair, typeOfFuel);
-        }if(isTypeOfFuelEqualNull(transmission, typeOfFuel)){
-            return carRepository.getCarsWithoutTypeOfFuel(minPrice, maxPrice, childrenChair, transmission);
-        }if(isTransmissionAndTypeOfFuelEqualNull(transmission, typeOfFuel)){
+    public LiveData<List<Car>> confirmChoice(String childrenChair, String transmission, String typeOfFuel, String sortBy, int minPrice, int maxPrice){
+        System.out.println(sortBy + "\n" + transmission + "\n" + typeOfFuel);
+        if(isSortByEqualNull(sortBy, transmission, typeOfFuel)){
+            return carRepository.getCarsWithoutSortBy(minPrice, maxPrice, childrenChair, typeOfFuel, transmission);
+        }if(isTransmissionAndSortByEqualNull(transmission, typeOfFuel, sortBy)){
+            return carRepository.getCarsWithoutTransmissionAndSortBy(minPrice, maxPrice, childrenChair, typeOfFuel);
+        }if(isTypeOfFuelAndSortByEqualNull(transmission, typeOfFuel, sortBy)){
+            return carRepository.getCarsWithoutTypeOfFuelAndSortBy(minPrice, maxPrice, childrenChair, transmission);
+        }if(isTransmissionAndTypeOfFuelEqualNull(transmission, typeOfFuel, sortBy)){
+            return carRepository.getCarsWithoutTransmissionAndTypeOfFuel(minPrice, maxPrice, childrenChair, sortBy);
+        }if(isTransmissionAndTypeOfFuelAndSortByEqualNull(transmission, typeOfFuel, sortBy)){
             return carRepository.getCarsByPriceAndChildrenChair(minPrice, maxPrice, childrenChair);
+        }if(isTransmissionEqualNull(transmission, typeOfFuel, sortBy)){
+            return carRepository.getCarsWithoutTransmission(minPrice, maxPrice, childrenChair, typeOfFuel, sortBy);
+        }if(isTypeOfFuelEqualNull(transmission, typeOfFuel, sortBy)){
+            return carRepository.getCarsWithoutTypeOfFuel(minPrice, maxPrice, childrenChair, transmission, sortBy);
         }
-        return carRepository.getCarsByAllChoices(minPrice, maxPrice, childrenChair, transmission, typeOfFuel);
+        return carRepository.getCarsByAllChoices(minPrice, maxPrice, childrenChair, transmission, typeOfFuel, sortBy);
     }
 
     public LiveData<Long> checkDate(String date){
@@ -171,7 +182,6 @@ public class CarViewModel extends ViewModel {
         }
         return differenceBetweenDates;
     }
-
 
     public LiveData<Integer> calculateDifferenceBetweenTwoDates(String startDate, String endDate, int price){
         MutableLiveData<Integer> priceRent = new MutableLiveData<>();
@@ -199,20 +209,35 @@ public class CarViewModel extends ViewModel {
         return price;
     }
 
-    private boolean isTransmissionEqualNull(String transmission, String typeOfFuel){
-        return transmission == null && typeOfFuel != null;
+    private boolean isSortByEqualNull(String sortBy, String transmission, String typeOfFuel){
+        return sortBy == null && (transmission != null && typeOfFuel != null);
     }
 
-    private boolean isTypeOfFuelEqualNull(String transmission, String typeOfFuel){
-        return transmission != null && typeOfFuel == null;
+    private boolean isTransmissionEqualNull(String transmission, String typeOfFuel, String sortBy){
+        return transmission == null && (sortBy != null && typeOfFuel != null);
     }
 
-    private boolean isTransmissionAndTypeOfFuelEqualNull(String transmission, String typeOfFuel){
-        return transmission == null && typeOfFuel == null;
+    private boolean isTypeOfFuelEqualNull(String transmission, String typeOfFuel, String sortBy){
+        return  typeOfFuel == null && (transmission != null && sortBy != null);
+    }
+
+    private boolean isTransmissionAndSortByEqualNull(String transmission, String typeOfFuel, String sortBy){
+        return (transmission == null && sortBy == null) && typeOfFuel != null;
+    }
+
+    private boolean isTypeOfFuelAndSortByEqualNull(String transmission, String typeOfFuel, String sortBy){
+        return (typeOfFuel == null && sortBy == null) && transmission != null;
+    }
+
+    private boolean isTransmissionAndTypeOfFuelEqualNull(String transmission, String typeOfFuel, String sortBy){
+        return (typeOfFuel == null && transmission == null) && sortBy != null;
+    }
+
+    private boolean isTransmissionAndTypeOfFuelAndSortByEqualNull(String transmission, String typeOfFuel, String sortBy){
+        return transmission == null && typeOfFuel == null && sortBy == null;
     }
 
     private boolean isDriverLicenceNumberCorrect(String driverLicenceNumber){
         return driverLicenceNumber.length() == 9;
     }
-
 }

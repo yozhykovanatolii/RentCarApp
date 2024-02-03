@@ -116,4 +116,10 @@
     <string name="write_review">Leave review</string>
     <string name="enter_review">Enter your review</string>
     <string name="send_review">Send review</string>
+    <string name="sort_by">Sort By</string>
+    <string name="not_chosen">Not chosen</string>
+    <string name="price_high_to_low">Price: high to low</string>
+    <string name="price_low_to_high">Price: low to high</string>
+    <string name="rating_high_to_low">Rating: high to low</string>
+    <string name="rating_low_to_high">Rating: low to high</string>
 </resources>

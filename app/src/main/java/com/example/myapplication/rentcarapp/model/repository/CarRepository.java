@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -216,7 +217,21 @@ public class CarRepository {
         return cars;
     }
 
-    public LiveData<List<Car>> getCarsByAllChoices(int minPrice, int maxPrice, String childrenChair, String transmission, String typeOfFuel){
+    public LiveData<List<Car>> getCarsByAllChoices(int minPrice, int maxPrice, String childrenChair, String transmission, String typeOfFuel, String sortBy){
+        String[] requestSortBy = sortBy.split(" ");
+        MutableLiveData<List<Car>> cars = new MutableLiveData<>();
+        firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("transmission", transmission).whereEqualTo("typeOfFuel", typeOfFuel).orderBy(requestSortBy[0], Query.Direction.valueOf(requestSortBy[1])).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
+                cars.setValue(task.getResult().toObjects(Car.class));
+            }else{
+                cars.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
+        return cars;
+    }
+
+    public LiveData<List<Car>> getCarsWithoutSortBy(int minPrice, int maxPrice, String childrenChair, String typeOfFuel, String transmission){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
         firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("transmission", transmission).whereEqualTo("typeOfFuel", typeOfFuel).get().addOnCompleteListener(task -> {
             if(task.isSuccessful() && !task.getResult().isEmpty()){
@@ -229,7 +244,21 @@ public class CarRepository {
         return cars;
     }
 
-    public LiveData<List<Car>> getCarsWithoutTransmission(int minPrice, int maxPrice, String childrenChair, String typeOfFuel){
+    public LiveData<List<Car>> getCarsWithoutTransmission(int minPrice, int maxPrice, String childrenChair, String typeOfFuel, String sortBy){
+        String[] requestSortBy = sortBy.split(" ");
+        MutableLiveData<List<Car>> cars = new MutableLiveData<>();
+        firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("typeOfFuel", typeOfFuel).orderBy(requestSortBy[0], Query.Direction.valueOf(requestSortBy[1])).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
+                cars.setValue(task.getResult().toObjects(Car.class));
+            }else{
+                cars.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
+        return cars;
+    }
+
+    public LiveData<List<Car>> getCarsWithoutTransmissionAndSortBy(int minPrice, int maxPrice, String childrenChair, String typeOfFuel){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
         firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("typeOfFuel", typeOfFuel).get().addOnCompleteListener(task -> {
             if(task.isSuccessful() && !task.getResult().isEmpty()){
@@ -242,7 +271,21 @@ public class CarRepository {
         return cars;
     }
 
-    public LiveData<List<Car>> getCarsWithoutTypeOfFuel(int minPrice, int maxPrice, String childrenChair, String transmission){
+    public LiveData<List<Car>> getCarsWithoutTypeOfFuel(int minPrice, int maxPrice, String childrenChair, String transmission, String sortBy){
+        String[] requestSortBy = sortBy.split(" ");
+        MutableLiveData<List<Car>> cars = new MutableLiveData<>();
+        firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("transmission", transmission).orderBy(requestSortBy[0], Query.Direction.valueOf(requestSortBy[1])).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
+                cars.setValue(task.getResult().toObjects(Car.class));
+            }else{
+                cars.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
+        return cars;
+    }
+
+    public LiveData<List<Car>> getCarsWithoutTypeOfFuelAndSortBy(int minPrice, int maxPrice, String childrenChair, String transmission){
         MutableLiveData<List<Car>> cars = new MutableLiveData<>();
         firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).whereEqualTo("transmission", transmission).get().addOnCompleteListener(task -> {
             if(task.isSuccessful() && !task.getResult().isEmpty()){
@@ -254,6 +297,21 @@ public class CarRepository {
         });
         return cars;
     }
+
+    public LiveData<List<Car>> getCarsWithoutTransmissionAndTypeOfFuel(int minPrice, int maxPrice, String childrenChair, String sortBy){
+        String[] requestSortBy = sortBy.split(" ");
+        MutableLiveData<List<Car>> cars = new MutableLiveData<>();
+        firestore.collection("cars").whereEqualTo("childrenChair", childrenChair).whereGreaterThanOrEqualTo("price", minPrice).whereLessThanOrEqualTo("price", maxPrice).orderBy(requestSortBy[0], Query.Direction.valueOf(requestSortBy[1])).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && !task.getResult().isEmpty()){
+                cars.setValue(task.getResult().toObjects(Car.class));
+            }else{
+                cars.setValue(null);
+                Log.i("Errors", "Exception:", task.getException());
+            }
+        });
+        return cars;
+    }
+
 
     public LiveData<String> getClientDriverLicence(){
         MutableLiveData<String> driverLicence = new MutableLiveData<>();
