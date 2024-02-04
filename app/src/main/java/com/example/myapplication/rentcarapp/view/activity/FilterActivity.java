@@ -1,6 +1,7 @@
 package com.example.myapplication.rentcarapp.view.activity;
 
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Barrier;
@@ -12,6 +13,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,6 +27,7 @@ import com.example.myapplication.rentcarapp.model.firestore.models.Car;
 import com.example.myapplication.rentcarapp.receiver.InternetReceiver;
 import com.example.myapplication.rentcarapp.viewmodel.CarViewModel;
 import com.google.android.material.slider.RangeSlider;
+import com.google.firebase.firestore.Query;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,10 +38,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class FilterActivity extends AppCompatActivity {
     RangeSlider priceSlider;
     CardView checkAuto, checkMechanic, checkGasoline, checkElectric, existChildrenChair;
-    TextView exist, auto, mechanic, electric, gasoline;
+    TextView notChosen, exist, auto, mechanic, electric, gasoline;
     ImageView imageView3, autoImage, mechanicImage, electricImage, gasolineImage;
+    RadioButton buttonPriceHighToLow, buttonPriceLowToHigh, buttonRatingHighToLow, buttonRatingLowToHigh;
+    AlertDialog alertDialog;
     CarViewModel carViewModel;
     BroadcastReceiver broadcastReceiver;
+    String chooseSortByCar = null;
     boolean isCardAutoClicked = false;
     boolean isCardMechanicClicked = false;
     boolean isCardElectricClicked = false;
@@ -82,6 +89,8 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     private void initTextsView(){
+        notChosen = findViewById(R.id.notChosen);
+        notChosen.setOnClickListener(this::sortCarBy);
         exist = findViewById(R.id.exist);
         auto = findViewById(R.id.auto);
         mechanic = findViewById(R.id.mechanic);
@@ -101,11 +110,11 @@ public class FilterActivity extends AppCompatActivity {
         List<Float> values = priceSlider.getValues();
         float minPrice = values.get(0);
         float maxPrice = values.get(1);
-        getCarsByFilter(isChairExist, transmission, typeOfFuel, (int) minPrice, (int) maxPrice);
+        getCarsByFilter(isChairExist, transmission, typeOfFuel, chooseSortByCar, (int) minPrice, (int) maxPrice);
     }
 
-    private void getCarsByFilter(String childrenChair, String transmission, String typeOfFuel, int minPrice, int maxPrice){
-        carViewModel.confirmChoice(childrenChair, transmission, typeOfFuel, minPrice, maxPrice).observe(this, this::sendChoicesClient);
+    private void getCarsByFilter(String childrenChair, String transmission, String typeOfFuel, String chooseSortByCar, int minPrice, int maxPrice){
+        carViewModel.confirmChoice(childrenChair, transmission, typeOfFuel, chooseSortByCar, minPrice, maxPrice).observe(this, this::sendChoicesClient);
     }
 
     private void sendChoicesClient(List<Car> cars){
@@ -238,6 +247,37 @@ public class FilterActivity extends AppCompatActivity {
             imageView3.setImageResource(R.drawable.baseline_child_care_24_white);
             exist.setTextColor(getResources().getColor(R.color.white));
         }
+    }
+
+    public void sortCarBy(View view){
+        initDialogBox();
+    }
+
+    private void initDialogBox(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View layout_dialog = LayoutInflater.from(this).inflate(R.layout.sort_by_dialog, null);
+        builder.setView(layout_dialog);
+        initDialogComponents(layout_dialog);
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void initDialogComponents(View layout_dialog){
+        buttonPriceHighToLow = layout_dialog.findViewById(R.id.buttonPriceHighToLow);
+        buttonPriceHighToLow.setOnClickListener(this::checkButtonsPrice);
+        buttonPriceLowToHigh = layout_dialog.findViewById(R.id.buttonPriceLowToHigh);
+        buttonPriceLowToHigh.setOnClickListener(this::checkButtonsPrice);
+    }
+
+    private void checkButtonsPrice(View view){
+        if(buttonPriceHighToLow.isChecked()){
+            notChosen.setText(R.string.price_high_to_low);
+            chooseSortByCar = "price " + Query.Direction.DESCENDING;
+        }if(buttonPriceLowToHigh.isChecked()){
+            notChosen.setText(R.string.price_low_to_high);
+            chooseSortByCar = "price " + Query.Direction.ASCENDING;
+        }
+        alertDialog.dismiss();
     }
 
     @Override
