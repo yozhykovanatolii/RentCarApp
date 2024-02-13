@@ -17,7 +17,6 @@
             android:layout_height="120dp"
             android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            android:src="@drawable/avatar"
             android:rotation="90"
             android:onClick="changePhoto"
             app:layout_constraintEnd_toStartOf="@id/guideline22"
