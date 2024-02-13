@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
         progressIndicator.setVisibility(View.VISIBLE);
         authViewModel.getUserByUsernameAndPassword(username, password).observe(this, user -> {
             if(user != null){
+                incorrect_username.setVisibility(View.GONE);
+                incorrect_password.setVisibility(View.GONE);
                 getClientEmail(user);
             }else{
                 progressIndicator.setVisibility(View.GONE);

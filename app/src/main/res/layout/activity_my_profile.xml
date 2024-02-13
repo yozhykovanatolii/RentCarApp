@@ -120,7 +120,7 @@
             app:cornerRadius="5dp"
             android:onClick="logOut"
             app:layout_constraintStart_toEndOf="@id/guideline21"
-            app:layout_constraintTop_toBottomOf="@id/updateUserPassword"
+            app:layout_constraintTop_toBottomOf="@id/mistakePassword"
             app:layout_constraintEnd_toStartOf="@id/guideline22"/>
 
         <TextView
@@ -254,7 +254,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="15"
-                android:inputType="text"
+                android:inputType="number"
                 android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
