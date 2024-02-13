@@ -43,7 +43,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
 
     //Firebase Cloud Messaging
-    implementation 'com.google.firebase:firebase-messaging:23.4.0'
+    implementation 'com.google.firebase:firebase-messaging:23.4.1'
 
     //Firebase Cloud Storage
     implementation("com.google.firebase:firebase-storage")

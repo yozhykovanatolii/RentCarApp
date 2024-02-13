@@ -124,17 +124,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void showErrorMessages(){
+        incorrect_username.setVisibility(View.VISIBLE);
+        incorrect_password.setVisibility(View.VISIBLE);
+    }
+
+    private void hideErrorMessages(){
+        incorrect_username.setVisibility(View.GONE);
+        incorrect_password.setVisibility(View.GONE);
+    }
+
     public void signIn(View view){
         String username = Objects.requireNonNull(signInUsername.getText()).toString();
         String password = Objects.requireNonNull(signInPassword.getText()).toString();
         progressIndicator.setVisibility(View.VISIBLE);
         authViewModel.getUserByUsernameAndPassword(username, password).observe(this, user -> {
             if(user != null){
+                hideErrorMessages();
                 getClientEmail(user);
             }else{
                 progressIndicator.setVisibility(View.GONE);
-                incorrect_username.setVisibility(View.VISIBLE);
-                incorrect_password.setVisibility(View.VISIBLE);
+                showErrorMessages();
             }
         });
     }

@@ -220,7 +220,7 @@
             android:layout_height="match_parent"
             android:ems="15"
             android:text="+38"
-            android:inputType="text"
+            android:inputType="number"
             android:paddingStart="10dp"
             android:textColor="@color/white" />
 

@@ -49,6 +49,7 @@ public class MyProfileActivity extends AppCompatActivity {
         initComponent();
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         initClientsData();
+        editUsername();
         editFullName();
         editPhone();
         editEmail();
@@ -96,6 +97,24 @@ public class MyProfileActivity extends AppCompatActivity {
         errorPhone.setVisibility(View.GONE);
         errorEmail.setVisibility(View.GONE);
         errorPassword.setVisibility(View.GONE);
+    }
+
+    private void editUsername(){
+        accountUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String username = Objects.requireNonNull(accountUsername.getText()).toString();
+                if(!username.equals(userCurrent.getUsername())){
+                    checkUsername(username);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
     private void editFullName(){
@@ -178,6 +197,16 @@ public class MyProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void checkUsername(String username){
+        authViewModel.getUserByUsername(username).observe(this, user -> {
+            if(user != null){
+                errorUsername.setVisibility(View.VISIBLE);
+            }else{
+                errorUsername.setVisibility(View.GONE);
+            }
+        });
+    }
+
     private boolean checkFullName(String fullName){
         AtomicBoolean isFullNameCorrect = new AtomicBoolean(false);
         authViewModel.isFullNameWriteCorrect(fullName).observe(this, aBoolean -> {
@@ -231,12 +260,27 @@ public class MyProfileActivity extends AppCompatActivity {
 
     public void updateProfile(View view){
         String username = Objects.requireNonNull(accountUsername.getText()).toString();
-        updateClient(username);
+        if(username.equals(userCurrent.getUsername())){
+            updateClient(username);
+        }else{
+            isUsernameExist(username);
+        }
     }
 
     public void changePhoto(View view){
         Intent intent = new Intent(Intent.ACTION_PICK);
         startActivityForResult(intent, 1000);
+    }
+
+    private void isUsernameExist(String username){
+        authViewModel.getUserByUsername(username).observe(this, user -> {
+            if(user != null){
+                errorUsername.setVisibility(View.VISIBLE);
+            }else{
+                errorUsername.setVisibility(View.GONE);
+                updateClient(username);
+            }
+        });
     }
 
     private void updateClient(String username){
