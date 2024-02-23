@@ -115,11 +115,6 @@ public class DetailActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
-    public void back(View view){
-        Intent intent = new Intent(this, MainWindowActivity.class);
-        startActivity(intent);
-    }
-
     public void getFavoriteClientsCars(View view){
         carViewModel.getFavoriteClientsCars().observe(this, this::updateFavoriteClientsCars);
     }
@@ -153,7 +148,6 @@ public class DetailActivity extends AppCompatActivity {
             imageList.add(new SlideModel(image, ScaleTypes.CENTER_CROP));
         }
         imageSlider.setImageList(imageList);
-        imageSlider.setSlideAnimation(AnimationTypes.ZOOM_OUT);
     }
 
     public void rentCar(View view){
